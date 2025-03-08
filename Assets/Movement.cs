@@ -43,7 +43,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isWallJumping)
         {
-            Flip();
+            if(mySpriteRenderer != null)
+            {
+                 // flip the sprite
+                 mySpriteRenderer.flipX = true;
+        }
         }
     }
 
@@ -101,10 +105,11 @@ public class PlayerMovement : MonoBehaviour
 
             if (transform.localScale.x != wallJumpingDirection)
             {
-                isFacingRight = !isFacingRight;
-                Vector3 localScale = transform.localScale;
-                localScale.x *= -1f;
-                transform.localScale = localScale;
+                if(mySpriteRenderer != null)
+            {
+                 // flip the sprite
+                 mySpriteRenderer.flipX = true;
+        }
             }
 
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
@@ -127,5 +132,6 @@ public class PlayerMovement : MonoBehaviour
                  mySpriteRenderer.flipX = true;
         }
 
-            }    }
+            }    
+    }
 }
