@@ -11,7 +11,6 @@ public class PerlinNoisMap : MonoBehaviour
 
     public GameObject prefab_Dark_stone;
     public GameObject prefab_Light_stone;
-    public GameObject prefab_Grass;
     public GameObject prefab_Wall_test;
 
     // Map size
@@ -76,15 +75,15 @@ public class PerlinNoisMap : MonoBehaviour
         // Create walls along the left and right edges
         for (int y = -mapHeight; y < mapHeight; y++)
         {
-            CreateWallTile(-mapWidth, y, wallGroup);
-            CreateWallTile(mapWidth - 1, y, wallGroup);
+            CreateWallTile(-mapWidth - 1, y, wallGroup);
+            CreateWallTile(mapWidth, y, wallGroup);
         }
 
         // Create walls along the top and bottom edges
         for (int x = -mapWidth; x < mapWidth; x++)
         {
-            CreateWallTile(x, -mapHeight, wallGroup);
-            CreateWallTile(x, mapHeight - 1, wallGroup);
+            CreateWallTile(x, -mapHeight - 1, wallGroup);
+            CreateWallTile(x, mapHeight, wallGroup);
         }
     }
 

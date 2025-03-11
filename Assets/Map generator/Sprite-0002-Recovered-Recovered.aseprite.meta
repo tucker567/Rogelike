@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9e7319fd249fc4744bb4344a6b432092
+guid: d58aed96240613a43a909d4e6e587030
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -126,8 +126,8 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -66354468
-    name: Sprite-0002
+    guid: 782525916
+    name: Sprite-0002-Recovered-Recovered
     layerFlags: 0
     layerType: 0
     blendMode: 0
