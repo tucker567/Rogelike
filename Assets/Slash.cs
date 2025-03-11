@@ -1,10 +1,12 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class Slash : MonoBehaviour
 {
-public IEnumerator Slash() {
-    spriteRenderer.enabled = true;           
+public IEnumerator Cut() {
+    gameObject.GetComponent<Renderer>().enabled = true;           
     yield return new WaitForSeconds(0.25f);  
-    spriteRenderer.enabled = false;          
+    gameObject.GetComponent<Renderer>().enabled = false;          
 }
 }

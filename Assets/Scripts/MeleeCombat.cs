@@ -27,7 +27,11 @@ public class MeleeCombat : MonoBehaviour
         isAttacking = true;
 
         Debug.Log("Attacking!");
-        StartCoroutine(Slash());
+       
+	
+			transform.Find("defaultStab").GetComponent<Slash>();
+		
+	
 
         isAttacking = false;
     }
