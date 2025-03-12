@@ -1,8 +1,10 @@
 using UnityEngine;
 
+
 public class MeleeCombat : MonoBehaviour
 {
-   
+   public Slash slash;
+
     private float attackRate = 2f; 
     private float nextAttackTime = 0f; // Time when the player can attack again
 
@@ -21,18 +23,17 @@ public class MeleeCombat : MonoBehaviour
 
     void Attack()
     {
-        // Set the time for the next attack
         nextAttackTime = Time.time + 1f / attackRate;
 
-        isAttacking = true;
+    isAttacking = true;
 
-        Debug.Log("Attacking!");
-       
-	
-			transform.Find("defaultStab").GetComponent<Slash>();
-		
-	
+    Debug.Log("Attacking!");
 
-        isAttacking = false;
+    if (slash != null)
+    {
+        StartCoroutine(slash.Cut());
+    }
+
+    isAttacking = false;
     }
 }
