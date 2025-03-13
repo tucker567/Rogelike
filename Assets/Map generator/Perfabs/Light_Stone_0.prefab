@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1249958443924752714}
   - component: {fileID: 3949136692028392983}
+  - component: {fileID: 7883964746469282898}
   m_Layer: 0
   m_Name: Light_Stone_0
   m_TagString: Untagged
@@ -87,3 +88,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!156049354 &7883964746469282898
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901880880171159428}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0

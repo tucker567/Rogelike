@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3543019647005580650}
   - component: {fileID: 4139755885082006199}
+  - component: {fileID: 7917251011062676156}
   m_Layer: 0
   m_Name: Dark_Stone_0
   m_TagString: Untagged
@@ -87,3 +88,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!156049354 &7917251011062676156
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826334817602361133}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
