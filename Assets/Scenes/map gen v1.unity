@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c11d20dbd65cf74ba23bef3486d8ef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab_Dark_stone: {fileID: 1901880880171159428, guid: 699bda2cc8b09f84e9f2271a0d34b63f, type: 3}
+  prefab_Dark_stone: {fileID: 5554501995873271388, guid: 07e004a1a77d3f04b96e5c89c37c84e1, type: 3}
   ruleTile_Light_stone: {fileID: 11400000, guid: 9e54b5faa20f42c43bed380d2a62d395, type: 2}
   prefab_Wall_test: {fileID: 7809423276624819837, guid: 02208e4bbf2f5a7488a4bc612f01db77, type: 3}
   lightStoneTilemap: {fileID: 265719914}

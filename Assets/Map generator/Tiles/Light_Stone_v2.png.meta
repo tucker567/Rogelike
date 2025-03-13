@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ef0de7bd69618484a9a8b418e11f512a
+guid: 21a881fde82fcfd46ba78b02124d551d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2971989394357994105
-    second: Light_Stone_0
+      213: -8336602827570025286
+    second: Light_Stone_v2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Light_Stone_0
+      name: Light_Stone_v2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 78d3011646f51c6d0800000000000000
-      internalID: -2971989394357994105
+      spriteID: abceb25c5ef6e4c80800000000000000
+      internalID: -8336602827570025286
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Light_Stone_0: -2971989394357994105
+      Light_Stone_v2_0: -8336602827570025286
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
