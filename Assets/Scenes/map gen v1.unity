@@ -530,9 +530,9 @@ MonoBehaviour:
   noiseThreshold: 0.5
   seed: -1
   numberOfDroplets: 1000
-  initialWaterAmount: 0.1
+  initialWaterAmount: 0.2
   evaporationRate: 0.99
-  sedimentCapacity: 0.1
+  sedimentCapacity: 0.2
   erosionStrength: 0.01
 --- !u!1 &1910678765
 GameObject:

@@ -1,14 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor;
+
+[CustomEditor(typeof(PerlinNoisMap))]
+public class PerlinNoisMapEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        EditorGUILayout.HelpBox("This system handles world generation\n - a good defalt for the setings are:\n - magnitude = 9\n - frequency = 0.75\n - number of rain droplets = 1000\n - initialwateramount = 0.2\n - evaporationRate = 0.99\n - sedimentCapacity = 0.2\n - erosionStrength = 0.01\n\n light_stone - The wall of the map, where player can't go\n ruletile - Using RuleTile for Dark stone\n Wall_test - used for the boundry", MessageType.Info);
+        
+        DrawDefaultInspector(); // Keeps the original Inspector fields
+    }
+}
 
 public class PerlinNoisMap : MonoBehaviour
 {
     // Dictionaries to store prefabs and their groups.
     Dictionary<int, GameObject> tileset;
     Dictionary<int, GameObject> tileGroups;
-
-
 
     public GameObject prefab_light_stone; // The wall of the map, where player can't go
     public RuleTile ruletile; // Using RuleTile for Dark stone
