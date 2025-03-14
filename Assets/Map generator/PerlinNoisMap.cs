@@ -8,8 +8,8 @@ public class PerlinNoisMap : MonoBehaviour
     Dictionary<int, GameObject> tileset;
     Dictionary<int, GameObject> tileGroups;
 
-    public GameObject prefab_Dark_stone;
-    public RuleTile ruleTile_Light_stone; // Using RuleTile for light stone
+    public GameObject prefab_light_stone; // The wall of the map, where player can't go
+    public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
 
     // Tilemap for the light stone RuleTile.
@@ -93,7 +93,7 @@ public class PerlinNoisMap : MonoBehaviour
     void CreateTileset()
     {
         tileset = new Dictionary<int, GameObject>();
-        tileset.Add(0, prefab_Dark_stone);
+        tileset.Add(0, prefab_light_stone); // Using prefab for Light stone
         // Note: The RuleTile for light stone is handled separately.
     }
 
@@ -144,7 +144,7 @@ public class PerlinNoisMap : MonoBehaviour
             // For light stone, use the RuleTile on the assigned Tilemap.
             if (lightStoneTilemap != null)
             {
-                lightStoneTilemap.SetTile(new Vector3Int(x, y, 0), ruleTile_Light_stone);
+                lightStoneTilemap.SetTile(new Vector3Int(x, y, 0), ruletile);
             }
             else
             {
