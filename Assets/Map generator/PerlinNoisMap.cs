@@ -11,6 +11,8 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_Dark_stone;
     public RuleTile ruleTile_Light_stone; // Using RuleTile for light stone
     public GameObject prefab_Wall_test;
+    public GameObject prefab_Portal;
+    public GameObject prefab_Player;
 
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
@@ -54,7 +56,7 @@ public class PerlinNoisMap : MonoBehaviour
         Debug.Log("Using Seed: " + seed);
 
         CreateTileset();
-        CreatTileGroups();
+        CreateTileGroups();
         GenerateMap();
         CreateBarrier();
 
@@ -97,7 +99,7 @@ public class PerlinNoisMap : MonoBehaviour
         // Note: The RuleTile for light stone is handled separately.
     }
 
-    void CreatTileGroups()
+    void CreateTileGroups()
     {
         tileGroups = new Dictionary<int, GameObject>();
         foreach (KeyValuePair<int, GameObject> prefab_pair in tileset)
@@ -125,6 +127,10 @@ public class PerlinNoisMap : MonoBehaviour
         }
 
         SimulateErosion(); // Apply erosion after map generation.
+        bool Eroded = true;
+        if (Eroded)
+        {PlacePortal();}
+       
     }
 
     int GetIdUsingPerlin(int x, int y)
@@ -213,9 +219,67 @@ public class PerlinNoisMap : MonoBehaviour
 
                 droplet.position = steepestDescent;
                 droplet.waterAmount *= evaporationRate;
+             
             }
         }
     }
+
+    void PlacePortal()
+    {
+        bool portalPlaced = false;
+        int attempts = 0;
+        int maxAttempts = 2500;
+
+        List<Vector3Int> validTiles = new List<Vector3Int>();
+
+        // Collect all Light_Stone tile positions from the tilemap
+        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+        {
+            for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+            {
+                Vector3Int tilePosition = new Vector3Int(x, y, 0);
+                if (lightStoneTilemap != null && lightStoneTilemap.GetTile(tilePosition) != ruleTile_Light_stone)
+                {
+                    validTiles.Add(tilePosition);
+                }
+            }
+        }
+
+        while (!portalPlaced && attempts < maxAttempts && validTiles.Count > 0)
+        {
+            attempts++;
+            int index = Random.Range(0, validTiles.Count);
+            Vector3Int chosenTile = validTiles[index];
+
+            // Place the portal at the valid position.
+            GameObject portal = Instantiate(prefab_Portal, transform);
+            portal.name = "Portal";
+            portal.transform.localPosition = new Vector3(chosenTile.x, chosenTile.y, 0);
+            Debug.Log("Portal position: " + chosenTile.x + ", " + chosenTile.y);
+            Destroy(tile_Grid[(chosenTile.x, chosenTile.y)]);
+            portalPlaced = true;
+           
+            SummonPlayer();
+
+            void SummonPlayer()
+            {
+                GameObject player = Instantiate(prefab_Player, transform);
+                player.name = "Player";
+                player.transform.localPosition = new Vector3(chosenTile.x, chosenTile.y, 0);
+            }
+
+        }
+
+        if (!portalPlaced)
+        {
+            Debug.LogWarning("Failed to place portal after " + maxAttempts + " attempts.");
+        }
+
+        
+        
+    
+    
+    
 }
 
 public class Droplet
@@ -236,3 +300,5 @@ public class TileProperties : MonoBehaviour
 {
     public float height = 0.1f; // Default height.
 }
+}
+
