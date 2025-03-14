@@ -429,7 +429,7 @@ MonoBehaviour:
   lightStoneTilemap: {fileID: 265719914}
   mapWidth: 160
   mapHeight: 90
-  magnitude: 11
+  magnitude: 9
   frequency: 0.75
   noiseThreshold: 0.5
   seed: -1
