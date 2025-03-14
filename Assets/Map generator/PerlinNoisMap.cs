@@ -8,6 +8,8 @@ public class PerlinNoisMap : MonoBehaviour
     Dictionary<int, GameObject> tileset;
     Dictionary<int, GameObject> tileGroups;
 
+
+
     public GameObject prefab_light_stone; // The wall of the map, where player can't go
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
