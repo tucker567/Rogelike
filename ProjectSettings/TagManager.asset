@@ -41,11 +41,5 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background Sorting
-    uniqueID: 2209794215
-    locked: 0
-  - name: Player Sorting
-    uniqueID: 1085248187
-    locked: 0
   m_RenderingLayers:
   - Default
