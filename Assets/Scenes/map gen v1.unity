@@ -696,7 +696,7 @@ MonoBehaviour:
   prefab_light_stone: {fileID: 5554501995873271388, guid: 07e004a1a77d3f04b96e5c89c37c84e1, type: 3}
   ruletile: {fileID: 11400000, guid: 9e54b5faa20f42c43bed380d2a62d395, type: 2}
   prefab_Wall_test: {fileID: 7809423276624819837, guid: 02208e4bbf2f5a7488a4bc612f01db77, type: 3}
-  prefab_Player: {fileID: 3852296330227158300, guid: 32bae0d58ac65044f8512f6d305546d8, type: 3}
+  prefab_Player: {fileID: 6608987066490057576, guid: 32bae0d58ac65044f8512f6d305546d8, type: 3}
   prefab_Vines: {fileID: 7045724845613158764, guid: 0f5f48ed16707834bab11ece864ae541, type: 3}
   prefab_Portal: {fileID: 1189084398896350488, guid: 64e267db24b99374eb3c6044dc62f21a, type: 3}
   grassVariants:

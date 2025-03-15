@@ -4,7 +4,7 @@ public class Movement : MonoBehaviour
 {
     private float speed = 6f; 
     private float horizontal;
-    private float jump = 12f;
+    private float jump = 18f;
     private bool isFacingRight = true;
 
     [SerializeField] private Rigidbody2D rb;
