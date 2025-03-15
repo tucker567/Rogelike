@@ -570,6 +570,7 @@ MonoBehaviour:
   prefab_Vines: {fileID: 7045724845613158764, guid: 0f5f48ed16707834bab11ece864ae541, type: 3}
   grassVariants:
   - {fileID: 7510658147385533607, guid: 61171c43460630a4d9d31061449ddb70, type: 3}
+  - {fileID: 3266067181897017228, guid: 4daa9e5cba86e9d4e8c7542374984774, type: 3}
   - {fileID: 6542674348259899008, guid: 276fb08ae3cd35c40a5e00555091c04c, type: 3}
   - {fileID: 2067993645046636534, guid: 2aa513c1e8a2bc042b0f9ccbc346bfef, type: 3}
   - {fileID: 2531130273512054815, guid: e80d67fa38b9fba439afee346191ae61, type: 3}
@@ -588,7 +589,7 @@ MonoBehaviour:
   evaporationRate: 0.99
   sedimentCapacity: 0.2
   erosionStrength: 0.01
-  spawnDecay: 0.2
+  spawnDecay: 0.4
 --- !u!1 &1910678765
 GameObject:
   m_ObjectHideFlags: 0
