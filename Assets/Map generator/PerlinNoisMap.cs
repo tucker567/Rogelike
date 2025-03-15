@@ -1,18 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEditor;
-
-[CustomEditor(typeof(PerlinNoisMap))]
-public class PerlinNoisMapEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        EditorGUILayout.HelpBox("This system handles world generation\n - a good defalt for the setings are:\n - magnitude = 9\n - frequency = 0.75\n - number of rain droplets = 1000\n - initialwateramount = 0.2\n - evaporationRate = 0.99\n - sedimentCapacity = 0.2\n - erosionStrength = 0.01\n\n light_stone - The wall of the map, where player can't go\n ruletile - Using RuleTile for Dark stone\n Wall_test - used for the boundry", MessageType.Info);
-        
-        DrawDefaultInspector(); // Keeps the original Inspector fields
-    }
-}
 
 public class PerlinNoisMap : MonoBehaviour
 {
@@ -23,6 +11,7 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_light_stone; // The wall of the map, where player can't go
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
+    public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
@@ -68,6 +57,7 @@ public class PerlinNoisMap : MonoBehaviour
         CreateTileset();
         CreatTileGroups();
         GenerateMap();
+        PlaceGrassOnSurface();
         CreateBarrier();
 
         Debug.Log("Map generation complete.");
@@ -171,6 +161,15 @@ public class PerlinNoisMap : MonoBehaviour
             GameObject tile = Instantiate(tile_prefab, tile_group.transform);
             tile.name = $"Tile_x{x}_y{y}";
             tile.transform.localPosition = new Vector3(x, y, 0);
+            
+            // Ensure TileProperties is set correctly
+            TileProperties tp = tile.GetComponent<TileProperties>();
+            if (tp == null)
+            {
+                tp = tile.AddComponent<TileProperties>();
+            }
+            tp.tileID = tile_id;
+            
             tile_Grid[(x, y)] = tile;
         }
     }
@@ -228,23 +227,90 @@ public class PerlinNoisMap : MonoBehaviour
             }
         }
     }
-}
 
-public class Droplet
-{
-    public Vector2 position;
-    public float waterAmount;
-    public float sedimentAmount;
-
-    public Droplet(Vector2 startPos, float initialWaterAmount)
+    public class Droplet
     {
-        position = startPos;
-        waterAmount = initialWaterAmount;
-        sedimentAmount = 0;
+        public Vector2 position;
+        public float waterAmount;
+        public float sedimentAmount;
+
+        public Droplet(Vector2 startPos, float initialWaterAmount)
+        {
+            position = startPos;
+            waterAmount = initialWaterAmount;
+            sedimentAmount = 0;
+        }
     }
+
+    public class TileProperties : MonoBehaviour
+    {
+        public int tileID; // Add tileID property.
+        public float height = 0.1f; // Default height.
+    }
+
+void PlaceGrassOnSurface()
+{
+    if (grassVariants == null || grassVariants.Count == 0)
+    {
+        Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
+        return;
+    }
+
+    Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
+
+    // Scan the entire map width and height
+    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+    {
+        for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+        {
+            if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected
+            {
+                if (!columnYValues.ContainsKey(x))
+                    columnYValues[x] = new List<int>();
+
+                columnYValues[x].Add(y);
+            }
+        }
+    }
+
+    if (columnYValues.Count == 0)
+    {
+        Debug.LogWarning("No light stone tiles detected on the tilemap.");
+        return;
+    }
+
+    Debug.Log($"Columns detected with light stone tiles: {columnYValues.Count}");
+
+    GameObject grassParent = new GameObject("GrassTiles");
+    grassParent.transform.parent = transform;
+
+    foreach (var entry in columnYValues)
+    {
+        int x = entry.Key;
+        List<int> yValues = entry.Value;
+        yValues.Sort();
+
+        for (int i = 1; i < yValues.Count; i++) 
+        {
+            int prevY = yValues[i - 1];
+            int currentY = yValues[i];
+
+            if (currentY - prevY > 1)
+            {
+                int grassY = prevY + 1; 
+
+                // Pick a random grass variant from the list
+                GameObject selectedGrass = grassVariants[Random.Range(0, grassVariants.Count)];
+
+                Vector3 grassPosition = new Vector3(x, grassY, -.01f);
+                GameObject grass = Instantiate(selectedGrass, grassPosition, Quaternion.identity);
+                grass.transform.parent = grassParent.transform;
+                grass.name = $"Grass_x{x}_y{grassY}";
+            }
+        }
+    }
+
+    Debug.Log("Grass placement complete!");
 }
 
-public class TileProperties : MonoBehaviour
-{
-    public float height = 0.1f; // Default height.
 }
