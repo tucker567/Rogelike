@@ -74,9 +74,8 @@ GameObject:
   - component: {fileID: 4812267080943338447}
   - component: {fileID: 6930137965572382097}
   - component: {fileID: 3703033165559984702}
-  - component: {fileID: 532329366125231538}
-  - component: {fileID: 4651699504080567597}
   - component: {fileID: 8807915743317391261}
+  - component: {fileID: 2095614494300029834}
   m_Layer: 3
   m_Name: character_0
   m_TagString: Player
@@ -93,8 +92,8 @@ Transform:
   m_GameObject: {fileID: 6608987066490057576}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.87, y: -60.18, z: 0}
-  m_LocalScale: {x: 0.9525, y: 1.0285, z: 1}
+  m_LocalPosition: {x: -31.8505, y: -60.2431, z: 0}
+  m_LocalScale: {x: 0.9134475, y: 0.90220016, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8300972163122219076}
@@ -230,44 +229,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &532329366125231538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6608987066490057576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2992b0ff188ccc41a8535ce66d6b456, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 6930137965572382097}
-  groundCheck: {fileID: 8300972163122219076}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  wallCheck: {fileID: 5760648913324558901}
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 192
---- !u!114 &4651699504080567597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6608987066490057576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9e4172852bd5d745814c2451ae36194, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 6930137965572382097}
-  groundCheck: {fileID: 8300972163122219076}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &8807915743317391261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +242,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slash: {fileID: 8251138891830739445}
+--- !u!114 &2095614494300029834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608987066490057576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffb5a7862a85fe445b274e5e4c4f7370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 8
+  jumpPower: 8
+  rb: {fileID: 6930137965572382097}
+  groundCheck: {fileID: 8300972163122219076}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheck: {fileID: 5760648913324558901}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 192
+  wallSlidingSpeed: 2
+  wallJumpingTime: 0.2
+  wallJumpingDuration: 0.4
+  wallJumpingPower: {x: 8, y: 16}
 --- !u!1 &8160311267529431995
 GameObject:
   m_ObjectHideFlags: 0
