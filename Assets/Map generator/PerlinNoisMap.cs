@@ -11,6 +11,7 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_light_stone; // The wall of the map, where player can't go
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
+    public GameObject prefab_Player;
     public GameObject prefab_Vines;
     public GameObject prefab_Portal;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
@@ -141,6 +142,7 @@ public class PerlinNoisMap : MonoBehaviour
 
         SimulateErosion(); // Apply erosion after map generation.
         PlacePortal(); // Place the portal after erosion.
+        
     }
 
     int GetIdUsingPerlin(int x, int y)
@@ -245,6 +247,9 @@ public class PerlinNoisMap : MonoBehaviour
     }
 
 
+
+
+
 void PlacePortal()
 {
     List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
@@ -279,6 +284,22 @@ void PlacePortal()
         // Place the portal at the chosen position
         Instantiate(prefab_Portal, (Vector3)chosenPosition, Quaternion.identity);
         Debug.Log($"Portal spawned at {chosenPosition}");
+
+        SummonPlayer();
+
+            void SummonPlayer()
+            {
+                GameObject player = Instantiate(prefab_Player, transform);
+                player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.1f, 0);
+
+                SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+                playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
+                playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
+
+
+            }
+
+            
     }
     else
     {

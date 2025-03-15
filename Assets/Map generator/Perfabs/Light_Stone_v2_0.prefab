@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4122604207473864349}
   - component: {fileID: 5262263893440794051}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light_Stone_v2_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 5554501995873271388}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2085173081
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -8336602827570025286, guid: 21a881fde82fcfd46ba78b02124d551d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
