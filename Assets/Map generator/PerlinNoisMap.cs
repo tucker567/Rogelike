@@ -12,6 +12,7 @@ public class PerlinNoisMap : MonoBehaviour
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
     public GameObject prefab_Vines;
+    public GameObject prefab_Portal;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
     // Tilemap for the light stone RuleTile.
@@ -139,6 +140,7 @@ public class PerlinNoisMap : MonoBehaviour
         }
 
         SimulateErosion(); // Apply erosion after map generation.
+        PlacePortal(); // Place the portal after erosion.
     }
 
     int GetIdUsingPerlin(int x, int y)
@@ -185,6 +187,8 @@ public class PerlinNoisMap : MonoBehaviour
             tile_Grid[(x, y)] = tile;
         }
     }
+
+     
 
     void SimulateErosion()
     {
@@ -239,6 +243,48 @@ public class PerlinNoisMap : MonoBehaviour
             }
         }
     }
+
+
+void PlacePortal()
+{
+    List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
+
+    // Scan the entire map for possible portal positions (where RuleTile isn't present).
+    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+    {
+        for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+        {
+            Vector3Int position = new Vector3Int(x, y, 0);
+            // If no RuleTile is present at this position, it's a valid portal spot
+            if (!lightStoneTilemap.HasTile(position))
+            {
+                possiblePortalPositions.Add(position);
+            }
+        }
+    }
+
+    if (possiblePortalPositions.Count > 0)
+    {
+        // Pick a random position from the list
+        Vector3Int chosenPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
+
+        // Destroy any existing tile or object at that position
+        if (tile_Grid.ContainsKey((chosenPosition.x, chosenPosition.y)))
+        {
+            Destroy(tile_Grid[(chosenPosition.x, chosenPosition.y)]); // Destroys the old tile
+            tile_Grid.Remove((chosenPosition.x, chosenPosition.y)); // Remove from the grid
+            Debug.Log($"Destroyed tile at {chosenPosition}");
+        }
+
+        // Place the portal at the chosen position
+        Instantiate(prefab_Portal, (Vector3)chosenPosition, Quaternion.identity);
+        Debug.Log($"Portal spawned at {chosenPosition}");
+    }
+    else
+    {
+        Debug.LogWarning("No valid portal positions found!");
+    }
+}
 
     public class Droplet
     {
