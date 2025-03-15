@@ -567,9 +567,14 @@ MonoBehaviour:
   prefab_light_stone: {fileID: 5554501995873271388, guid: 07e004a1a77d3f04b96e5c89c37c84e1, type: 3}
   ruletile: {fileID: 11400000, guid: 9e54b5faa20f42c43bed380d2a62d395, type: 2}
   prefab_Wall_test: {fileID: 7809423276624819837, guid: 02208e4bbf2f5a7488a4bc612f01db77, type: 3}
+  prefab_Vines: {fileID: 7045724845613158764, guid: 0f5f48ed16707834bab11ece864ae541, type: 3}
   grassVariants:
   - {fileID: 7510658147385533607, guid: 61171c43460630a4d9d31061449ddb70, type: 3}
+  - {fileID: 2067993645046636534, guid: 2aa513c1e8a2bc042b0f9ccbc346bfef, type: 3}
   lightStoneTilemap: {fileID: 265719914}
+  vinesToLightStoneRatio: 0.08
+  minVineLength: 2
+  maxVineLength: 6
   mapWidth: 160
   mapHeight: 90
   magnitude: 9
@@ -581,6 +586,7 @@ MonoBehaviour:
   evaporationRate: 0.99
   sedimentCapacity: 0.2
   erosionStrength: 0.01
+  spawnDecay: 0.2
 --- !u!1 &1910678765
 GameObject:
   m_ObjectHideFlags: 0

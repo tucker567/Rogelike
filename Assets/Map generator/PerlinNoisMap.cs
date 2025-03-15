@@ -11,10 +11,17 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_light_stone; // The wall of the map, where player can't go
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
+    public GameObject prefab_Vines;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
+    // % of vines to light stone tiles
+    public float vinesToLightStoneRatio = 0.1f;
+    // min vine length
+    public int minVineLength = 1;
+    // max vine length
+    public int maxVineLength = 6;
 
     // Map dimensions (the map will be exactly mapWidth x mapHeight).
     public int mapWidth = 160;
@@ -40,6 +47,10 @@ public class PerlinNoisMap : MonoBehaviour
     public float evaporationRate = 0.99f;
     public float sedimentCapacity = 0.1f;
     public float erosionStrength = 0.01f;
+    
+    // Public variable to adjust weighted spawn chance decay for grass variants.
+    // Lower values give a steeper drop-off in spawn chance.
+    public float spawnDecay = 0.5f; 
 
     void Start()
     {
@@ -58,6 +69,7 @@ public class PerlinNoisMap : MonoBehaviour
         CreatTileGroups();
         GenerateMap();
         PlaceGrassOnSurface();
+        PlaceVinesOnRandomGrayStone();
         CreateBarrier();
 
         Debug.Log("Map generation complete.");
@@ -248,69 +260,164 @@ public class PerlinNoisMap : MonoBehaviour
         public float height = 0.1f; // Default height.
     }
 
-void PlaceGrassOnSurface()
-{
-    if (grassVariants == null || grassVariants.Count == 0)
+    void PlaceGrassOnSurface()
     {
-        Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
-        return;
+        if (grassVariants == null || grassVariants.Count == 0)
+        {
+            Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
+            return;
+        }
+
+        Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
+
+        // Scan the entire map width and height.
+        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+        {
+            for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+            {
+                if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected.
+                {
+                    if (!columnYValues.ContainsKey(x))
+                        columnYValues[x] = new List<int>();
+
+                    columnYValues[x].Add(y);
+                }
+            }
+        }
+
+        if (columnYValues.Count == 0)
+        {
+            Debug.LogWarning("No light stone tiles detected on the tilemap.");
+            return;
+        }
+
+        Debug.Log($"Columns detected with light stone tiles: {columnYValues.Count}");
+
+        GameObject grassParent = new GameObject("GrassTiles");
+        grassParent.transform.parent = transform;
+
+        foreach (var entry in columnYValues)
+        {
+            int x = entry.Key;
+            List<int> yValues = entry.Value;
+            yValues.Sort();
+
+            for (int i = 1; i < yValues.Count; i++) 
+            {
+                int prevY = yValues[i - 1];
+                int currentY = yValues[i];
+
+                if (currentY - prevY > 1)
+                {
+                    int grassY = prevY + 1; 
+
+                    // Use weighted spawn chance for selecting a grass variant.
+                    float totalWeight = 0f;
+                    for (int j = 0; j < grassVariants.Count; j++)
+                    {
+                        totalWeight += Mathf.Pow(spawnDecay, j);
+                    }
+
+                    float randomValue = Random.Range(0f, totalWeight);
+                    GameObject selectedGrass = grassVariants[grassVariants.Count - 1]; // Default to the last element.
+
+                    for (int j = 0; j < grassVariants.Count; j++)
+                    {
+                        float weight = Mathf.Pow(spawnDecay, j);
+                        if (randomValue < weight)
+                        {
+                            selectedGrass = grassVariants[j];
+                            break;
+                        }
+                        randomValue -= weight;
+                    }
+
+                    Vector3 grassPosition = new Vector3(x, grassY, -0.01f);
+                    GameObject grass = Instantiate(selectedGrass, grassPosition, Quaternion.identity);
+                    grass.transform.parent = grassParent.transform;
+                    grass.name = $"Grass_x{x}_y{grassY}";
+                }
+            }
+        }
+
+        Debug.Log("Grass placement complete!");
     }
 
-    Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
-
-    // Scan the entire map width and height
-    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+    void PlaceVinesOnRandomGrayStone()
     {
-        for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
-        {
-            if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected
-            {
-                if (!columnYValues.ContainsKey(x))
-                    columnYValues[x] = new List<int>();
+        List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
-                columnYValues[x].Add(y);
+        // Step 1: Find all gray stone tiles by tile ID.
+        foreach (var entry in tile_Grid)
+        {
+            TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
+
+            if (tileProperties != null && tileProperties.tileID == 0) // Assuming 0 is gray stone.
+            {
+                grayStoneTiles.Add(entry);
+            }
+        }
+
+        if (grayStoneTiles.Count == 0)
+        {
+            Debug.LogWarning("No gray stone tiles found.");
+            return;
+        }
+
+        Debug.Log($"Number of gray stone tiles found: {grayStoneTiles.Count}");
+        int numVines = Mathf.CeilToInt(vinesToLightStoneRatio * grayStoneTiles.Count);
+
+        // Create a parent object for vines (for better organization).
+        GameObject vinesParent = new GameObject("Vines");
+        vinesParent.transform.parent = transform;
+
+        for (int i = 0; i < numVines; i++)
+        {
+            KeyValuePair<(int, int), GameObject> randomTile = grayStoneTiles[Random.Range(0, grayStoneTiles.Count)];
+            (int x, int y) = randomTile.Key;
+
+            // Step 2: Ensure no light stone tile is present above.
+            if (lightStoneTilemap.HasTile(new Vector3Int(x, y + 1, 0)))
+            {
+                Debug.Log($"Light stone tile found at ({x}, {y + 1}), vines should not be placed here.");
+                continue;
+            }
+
+            // Step 3: Instantiate vines above the selected gray stone tile.
+            if (prefab_Vines == null)
+            {
+                Debug.LogWarning("Vine prefab is not assigned in the inspector.");
+                return;
+            }
+
+            // Determine the random length for the vine.
+            int vineLength = Random.Range(minVineLength, maxVineLength + 1);
+
+            for (int j = 1; j <= vineLength; j++)
+            {
+                int vineY = y + j;
+
+                // Ensure the vine does not grow outside the map boundaries.
+                if (vineY < -mapHeight / 2 || vineY > mapHeight / 2)
+                {
+                    Debug.Log($"Vine growth stopped at ({x}, {vineY}) due to boundary limits.");
+                    break;
+                }
+
+                // Ensure no light stone tile is present at the current position.
+                if (lightStoneTilemap.HasTile(new Vector3Int(x, vineY, 0)))
+                {
+                    Debug.Log($"Light stone tile found at ({x}, {vineY}), stopping vine growth.");
+                    break;
+                }
+
+                GameObject vines = Instantiate(prefab_Vines, new Vector3(x, vineY, -0.01f), Quaternion.identity);
+                vines.name = $"Vines_x{x}_y{vineY}";
+                vines.transform.parent = vinesParent.transform;
+                tile_Grid[(x, vineY)] = vines;
+
+                Debug.Log($"Placed vine segment at ({x}, {vineY})");
             }
         }
     }
-
-    if (columnYValues.Count == 0)
-    {
-        Debug.LogWarning("No light stone tiles detected on the tilemap.");
-        return;
-    }
-
-    Debug.Log($"Columns detected with light stone tiles: {columnYValues.Count}");
-
-    GameObject grassParent = new GameObject("GrassTiles");
-    grassParent.transform.parent = transform;
-
-    foreach (var entry in columnYValues)
-    {
-        int x = entry.Key;
-        List<int> yValues = entry.Value;
-        yValues.Sort();
-
-        for (int i = 1; i < yValues.Count; i++) 
-        {
-            int prevY = yValues[i - 1];
-            int currentY = yValues[i];
-
-            if (currentY - prevY > 1)
-            {
-                int grassY = prevY + 1; 
-
-                // Pick a random grass variant from the list
-                GameObject selectedGrass = grassVariants[Random.Range(0, grassVariants.Count)];
-
-                Vector3 grassPosition = new Vector3(x, grassY, -.01f);
-                GameObject grass = Instantiate(selectedGrass, grassPosition, Quaternion.identity);
-                grass.transform.parent = grassParent.transform;
-                grass.name = $"Grass_x{x}_y{grassY}";
-            }
-        }
-    }
-
-    Debug.Log("Grass placement complete!");
-}
-
 }
