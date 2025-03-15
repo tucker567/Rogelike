@@ -66,7 +66,7 @@ public class PerlinNoisMap : MonoBehaviour
         Debug.Log("Using Seed: " + seed);
 
         CreateTileset();
-        CreatTileGroups();
+        CreateTileGroups();
         GenerateMap();
         PlaceGrassOnSurface();
         PlaceVinesOnRandomGrayStone();
@@ -111,7 +111,7 @@ public class PerlinNoisMap : MonoBehaviour
         // Note: The RuleTile for light stone is handled separately.
     }
 
-    void CreatTileGroups()
+    void CreateTileGroups()
     {
         tileGroups = new Dictionary<int, GameObject>();
         foreach (KeyValuePair<int, GameObject> prefab_pair in tileset)
