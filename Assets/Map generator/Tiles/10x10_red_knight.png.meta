@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ffa675f1d8272ca46a649636bf949e96
+guid: 37d393c892662f34699e2143b9b6fdff
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6545382614753218560
-    second: bush_0
+      213: -8155056962410448219
+    second: 10x10_red_knight_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bush_0
+      name: 10x10_red_knight_0
       rect:
         serializedVersion: 2
         x: 0
@@ -121,15 +121,15 @@ TextureImporter:
         width: 10
         height: 10
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 00012672fced5da50800000000000000
-      internalID: 6545382614753218560
+      spriteID: 5aaf27866ea63de80800000000000000
+      internalID: -8155056962410448219
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: bf8e1add1e508d042ba8d578640a9b9e
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      bush_0: 6545382614753218560
+      10x10_red_knight_0: -8155056962410448219
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
