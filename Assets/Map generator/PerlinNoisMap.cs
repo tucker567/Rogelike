@@ -375,8 +375,6 @@ void SummonPlayer(Vector3Int chosenPosition)
             return;
         }
 
-        Debug.Log($"Columns detected with light stone tiles: {columnYValues.Count}");
-
         GameObject grassParent = new GameObject("GrassTiles");
         grassParent.transform.parent = transform;
 
@@ -463,7 +461,6 @@ void SummonPlayer(Vector3Int chosenPosition)
             // Step 2: Ensure no light stone tile is present above.
             if (lightStoneTilemap.HasTile(new Vector3Int(x, y + 1, 0)))
             {
-                Debug.Log($"Light stone tile found at ({x}, {y + 1}), vines should not be placed here.");
                 continue;
             }
 
@@ -484,14 +481,12 @@ void SummonPlayer(Vector3Int chosenPosition)
                 // Ensure the vine does not grow outside the map boundaries.
                 if (vineY < -mapHeight / 2 || vineY > mapHeight / 2)
                 {
-                    Debug.Log($"Vine growth stopped at ({x}, {vineY}) due to boundary limits.");
                     break;
                 }
 
                 // Ensure no light stone tile is present at the current position.
                 if (lightStoneTilemap.HasTile(new Vector3Int(x, vineY, 0)))
                 {
-                    Debug.Log($"Light stone tile found at ({x}, {vineY}), stopping vine growth.");
                     break;
                 }
 
@@ -499,8 +494,6 @@ void SummonPlayer(Vector3Int chosenPosition)
                 vines.name = $"Vines_x{x}_y{vineY}";
                 vines.transform.parent = vinesParent.transform;
                 tile_Grid[(x, vineY)] = vines;
-
-                Debug.Log($"Placed vine segment at ({x}, {vineY})");
             }
         }
     }
