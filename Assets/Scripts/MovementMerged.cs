@@ -4,7 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     // Movement parameters
     [SerializeField] private float speed = 8f;           // Horizontal movement speed
-    [SerializeField] private float jumpPower = 16f;        // Jump vertical power
+    [SerializeField] private float jumpPower = 16f;      // Jump vertical power
     private float horizontal;
     private bool isFacingRight = true;
 
@@ -37,10 +37,10 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
         }
         // Cut jump short if jump button is released while moving upward
-        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-        }
+         // if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
+         // {
+         //     rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+         // }
 
         // Handle wall sliding and wall jumping if wall references are set
         if (wallCheck != null)
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f)
         {
             isWallJumping = true;
-            rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+            rb.linearVelocity = new Vector2(wallJumpingPower.x, wallJumpingPower.y);
             wallJumpingCounter = 0f;
 
             // Removed flipping logic during wall jump; character's facing direction remains unchanged
