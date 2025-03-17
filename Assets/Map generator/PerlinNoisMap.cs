@@ -190,8 +190,7 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-     
-
+    
     void SimulateErosion()
     {
         for (int i = 0; i < numberOfDroplets; i++)
@@ -247,9 +246,6 @@ public class PerlinNoisMap : MonoBehaviour
     }
 
 
-
-
-
 void PlacePortal()
 {
     List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
@@ -273,13 +269,6 @@ void PlacePortal()
         // Pick a random position from the list
         Vector3Int chosenPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
 
-        // Destroy any existing tile or object at that position
-        if (tile_Grid.ContainsKey((chosenPosition.x, chosenPosition.y)))
-        {
-            Destroy(tile_Grid[(chosenPosition.x, chosenPosition.y)]); // Destroys the old tile
-            tile_Grid.Remove((chosenPosition.x, chosenPosition.y)); // Remove from the grid
-            Debug.Log($"Destroyed tile at {chosenPosition}");
-        }
 
         // Place the portal at the chosen position
         Instantiate(prefab_Portal, (Vector3)chosenPosition, Quaternion.identity);
@@ -294,7 +283,7 @@ void PlacePortal()
 
                 SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
                 playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
-                playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
+                playerRenderer.sortingOrder = 1; // Higher Number = Farther forward
 
 
             }
