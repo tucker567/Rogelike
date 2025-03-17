@@ -14,7 +14,8 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_Player;
     public GameObject prefab_Vines;
     public GameObject prefab_Portal;
-    public GameObject prefab_Camera;
+    public List<GameObject> prefab_Cameras = new List<GameObject>();
+    public int chancetospawncamera = 10;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
     // Tilemap for the light stone RuleTile.
@@ -500,36 +501,49 @@ void SummonPlayer(Vector3Int chosenPosition)
         }
     }
 
+
     void PlaceCamerasOnBottom()
+{
+    GameObject cameraParent = new GameObject("Cameras");
+    cameraParent.transform.parent = transform;
+
+    // Loop through columns (x-values)
+    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
     {
-        Gameobject cameraParent = new GameObject("Cameras");
-        cameraParent.transform.parent = transform;
+        int? lastSolidTileY = null; // Track the last solid tile’s y-coordinate
 
-        // scan the entire map width and height for light stone tiles.
-        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+        // Loop from top to bottom to detect height jumps
+        for (int y = mapHeight / 2; y >= -mapHeight / 2; y--)
         {
-            for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
-            {
-                Vector3Int tilePosition = new Vector3Int(x, y, 0);
-                Vector3Int tileAbovePosition = new Vector3Int(x, y + 1, 0);
+            Vector3Int tilePosition = new Vector3Int(x, y, 0);
 
-                // Check if this tile is a light stone tile.
-                if (lightStoneTilemap.HasTile(tilePosition))
+            if (lightStoneTilemap.HasTile(tilePosition)) 
+            {
+                // If there was a previous solid tile and the gap between them is more than 1, it's a height jump
+                if (lastSolidTileY != null && y < lastSolidTileY - 1)
                 {
-                    // Check if the tile above is empty.
-                    if (!lightStoneTilemap.HasTile(tileAbovePosition) && !tile_Grid.ContainsKey((x, y + 1)))
+                    // Check if we should spawn a camera based on the chance
+                    if (Random.Range(0, chancetospawncamera) == 0)
                     {
-                        Vector3 cameraPosition = new Vector3(x, y + 1, -0.01f);
-                        GameObject camera = Instantiate(prefab_Camera, cameraPosition, Quaternion.identity);
+                        Vector3 cameraPosition = new Vector3(x, lastSolidTileY.Value - 1, -0.01f);
+                        
+                        // Select a random camera prefab from the list
+                        GameObject selectedCameraPrefab = prefab_Cameras[Random.Range(0, prefab_Cameras.Count)];
+                        
+                        GameObject camera = Instantiate(selectedCameraPrefab, cameraPosition, Quaternion.identity);
                         camera.transform.parent = cameraParent.transform;
-                        tile_Grid[(x, y + 1)] = camera;
+                        camera.name = $"Camera_x{x}_y{lastSolidTileY.Value - 1}";
 
                         // Store camera in tile Grid
-                        tile_Grid[(x, y + 1)] = camera;
+                        tile_Grid[(x, lastSolidTileY.Value - 1)] = camera;
                     }
                 }
+
+                lastSolidTileY = y; // Update last solid tile position
             }
         }
-            Debug.Log("Cameras placement complete!");
     }
+    Debug.Log("Cameras placement complete!");
+}
+
 }
