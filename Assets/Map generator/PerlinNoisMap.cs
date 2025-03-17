@@ -190,8 +190,7 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-     
-
+    
     void SimulateErosion()
     {
         for (int i = 0; i < numberOfDroplets; i++)
@@ -246,6 +245,10 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 52390fb454ef280b31fb50f004e40941b02c0e5e
 void PlacePortal()
 {
     if (grassVariants == null || grassVariants.Count == 0)
@@ -303,11 +306,34 @@ void PlacePortal()
         // Select a random position from the list of possible portal positions.
         Vector3Int selectedPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
 
+<<<<<<< HEAD
         // Place the portal at the selected position
         GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, -0.2f), Quaternion.identity);
         Debug.Log($"Portal spawned at {selectedPosition}");
 
         SummonPlayer(selectedPosition);
+=======
+
+        // Place the portal at the chosen position
+        Instantiate(prefab_Portal, (Vector3)chosenPosition, Quaternion.identity);
+        Debug.Log($"Portal spawned at {chosenPosition}");
+
+        SummonPlayer();
+
+            void SummonPlayer()
+            {
+                GameObject player = Instantiate(prefab_Player, transform);
+                player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.1f, 0);
+
+                SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+                playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
+                playerRenderer.sortingOrder = 1; // Higher Number = Farther forward
+
+
+            }
+
+            
+>>>>>>> 52390fb454ef280b31fb50f004e40941b02c0e5e
     }
     else
     {
