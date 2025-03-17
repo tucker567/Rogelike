@@ -5560,9 +5560,11 @@ MonoBehaviour:
   prefab_Player: {fileID: 6608987066490057576, guid: 32bae0d58ac65044f8512f6d305546d8, type: 3}
   prefab_Vines: {fileID: 7045724845613158764, guid: 0f5f48ed16707834bab11ece864ae541, type: 3}
   prefab_Portal: {fileID: 1189084398896350488, guid: 64e267db24b99374eb3c6044dc62f21a, type: 3}
+  CameraVariants:
+  - {fileID: 190557831451757393, guid: a9ab848fce0ff184ab4419c6addc3ed4, type: 3}
+  - {fileID: 8826860018447720959, guid: e03ddfc4e98e1d94c9ebc0c1703f326d, type: 3}
   grassVariants:
   - {fileID: 7510658147385533607, guid: 61171c43460630a4d9d31061449ddb70, type: 3}
-  - {fileID: 3266067181897017228, guid: 4daa9e5cba86e9d4e8c7542374984774, type: 3}
   - {fileID: 6542674348259899008, guid: 276fb08ae3cd35c40a5e00555091c04c, type: 3}
   - {fileID: 2067993645046636534, guid: 2aa513c1e8a2bc042b0f9ccbc346bfef, type: 3}
   - {fileID: 2531130273512054815, guid: e80d67fa38b9fba439afee346191ae61, type: 3}

@@ -14,6 +14,7 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_Player;
     public GameObject prefab_Vines;
     public GameObject prefab_Portal;
+    public GameObject prefab_Camera;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
     // Tilemap for the light stone RuleTile.
@@ -71,6 +72,7 @@ public class PerlinNoisMap : MonoBehaviour
         CreateTileGroups();
         GenerateMap();
         PlaceGrassOnSurface();
+        PlaceCamerasOnBottom();
         PlaceVinesOnRandomGrayStone();
         CreateBarrier();
 
@@ -496,5 +498,38 @@ void SummonPlayer(Vector3Int chosenPosition)
                 tile_Grid[(x, vineY)] = vines;
             }
         }
+    }
+
+    void PlaceCamerasOnBottom()
+    {
+        Gameobject cameraParent = new GameObject("Cameras");
+        cameraParent.transform.parent = transform;
+
+        // scan the entire map width and height for light stone tiles.
+        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+        {
+            for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+            {
+                Vector3Int tilePosition = new Vector3Int(x, y, 0);
+                Vector3Int tileAbovePosition = new Vector3Int(x, y + 1, 0);
+
+                // Check if this tile is a light stone tile.
+                if (lightStoneTilemap.HasTile(tilePosition))
+                {
+                    // Check if the tile above is empty.
+                    if (!lightStoneTilemap.HasTile(tileAbovePosition) && !tile_Grid.ContainsKey((x, y + 1)))
+                    {
+                        Vector3 cameraPosition = new Vector3(x, y + 1, -0.01f);
+                        GameObject camera = Instantiate(prefab_Camera, cameraPosition, Quaternion.identity);
+                        camera.transform.parent = cameraParent.transform;
+                        tile_Grid[(x, y + 1)] = camera;
+
+                        // Store camera in tile Grid
+                        tile_Grid[(x, y + 1)] = camera;
+                    }
+                }
+            }
+        }
+            Debug.Log("Cameras placement complete!");
     }
 }
