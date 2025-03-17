@@ -246,65 +246,83 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-
-
-
-
 void PlacePortal()
 {
-    List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
+    if (grassVariants == null || grassVariants.Count == 0)
+    {
+        Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
+        return;
+    }
 
-    // Scan the entire map for possible portal positions (where RuleTile isn't present).
+    Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
+
+    // Scan the entire map width and height.
     for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
     {
         for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
         {
-            Vector3Int position = new Vector3Int(x, y, 0);
-            // If no RuleTile is present at this position, it's a valid portal spot
-            if (!lightStoneTilemap.HasTile(position))
+            if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected.
             {
-                possiblePortalPositions.Add(position);
+                if (!columnYValues.ContainsKey(x))
+                    columnYValues[x] = new List<int>();
+
+                columnYValues[x].Add(y);
+            }
+        }
+    }
+
+    if (columnYValues.Count == 0)
+    {
+        Debug.LogWarning("No light stone tiles detected on the tilemap.");
+        return;
+    }
+
+    List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
+
+    foreach (var entry in columnYValues)
+    {
+        int x = entry.Key;
+        List<int> yValues = entry.Value;
+        yValues.Sort();
+
+        for (int i = 1; i < yValues.Count; i++)
+        {
+            int prevY = yValues[i - 1];
+            int currentY = yValues[i];
+
+            if (currentY - prevY > 1)
+            {
+                int portalY = prevY + 1;
+                possiblePortalPositions.Add(new Vector3Int(x, portalY, 0));
             }
         }
     }
 
     if (possiblePortalPositions.Count > 0)
     {
-        // Pick a random position from the list
-        Vector3Int chosenPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
+        // Select a random position from the list of possible portal positions.
+        Vector3Int selectedPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
 
-        // Destroy any existing tile or object at that position
-        if (tile_Grid.ContainsKey((chosenPosition.x, chosenPosition.y)))
-        {
-            Destroy(tile_Grid[(chosenPosition.x, chosenPosition.y)]); // Destroys the old tile
-            tile_Grid.Remove((chosenPosition.x, chosenPosition.y)); // Remove from the grid
-            Debug.Log($"Destroyed tile at {chosenPosition}");
-        }
+        // Place the portal at the selected position
+        GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, -0.2f), Quaternion.identity);
+        Debug.Log($"Portal spawned at {selectedPosition}");
 
-        // Place the portal at the chosen position
-        Instantiate(prefab_Portal, (Vector3)chosenPosition, Quaternion.identity);
-        Debug.Log($"Portal spawned at {chosenPosition}");
-
-        SummonPlayer();
-
-            void SummonPlayer()
-            {
-                GameObject player = Instantiate(prefab_Player, transform);
-                player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.1f, 0);
-
-                SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
-                playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
-                playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
-
-
-            }
-
-            
+        SummonPlayer(selectedPosition);
     }
     else
     {
         Debug.LogWarning("No valid portal positions found!");
     }
+}
+
+void SummonPlayer(Vector3Int chosenPosition)
+{
+    GameObject player = Instantiate(prefab_Player, transform);
+    player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.1f, 0);
+
+    SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+    playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
+    playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
 }
 
     public class Droplet
