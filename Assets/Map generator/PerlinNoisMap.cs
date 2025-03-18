@@ -432,12 +432,12 @@ void SummonPlayer(Vector3Int chosenPosition)
     {
         List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
-        // Step 1: Find all gray stone tiles by tile ID.
+        // Step 1: Find all gray stone tiles by tile ID. (0)
         foreach (var entry in tile_Grid)
         {
             TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
 
-            if (tileProperties != null && tileProperties.tileID == 0) // Assuming 0 is gray stone.
+            if (tileProperties != null && tileProperties.tileID == 0) // If 0 is gray stone.
             {
                 grayStoneTiles.Add(entry);
             }
