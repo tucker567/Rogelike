@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public ParticleSystem Dust;
+
     // Movement parameters
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpPower = 16f;
@@ -45,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            CreateDust();
         }
 
         // Handle wall sliding and wall jumping
@@ -111,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
             wallJumpCount++; // Increment the wall jump count
 
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
+            CreateDust();
         }
     }
 
@@ -137,5 +141,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 localScale = transform.localScale;
         localScale.x *= -1f;
         transform.localScale = localScale;
+    }
+
+    void CreateDust()
+    {
+        Dust.Play();
     }
 }
