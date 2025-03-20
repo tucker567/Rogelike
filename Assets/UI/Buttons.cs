@@ -14,4 +14,5 @@ public class Buttons : MonoBehaviour
         Application.Quit();
         Debug.Log("Game is exiting");
     }
+
 }

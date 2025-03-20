@@ -5350,7 +5350,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 9.683333
+  orthographic size: 14.525
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -5440,6 +5440,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 4275566171360732718, guid: 32bae0d58ac65044f8512f6d305546d8, type: 3}
   smoothSpeed: 5
+  maxSpeed: 10
+  distanceThreshold: 5
   offset: {x: 0, y: 2, z: -10}
 --- !u!114 &1520265512
 MonoBehaviour:
@@ -5454,9 +5456,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
-  m_AssetsPPU: 10
-  m_RefResolutionX: 320
-  m_RefResolutionY: 180
+  m_AssetsPPU: 35
+  m_RefResolutionX: 640
+  m_RefResolutionY: 360
   m_CropFrame: 0
   m_GridSnapping: 0
   m_FilterMode: 0
@@ -5563,7 +5565,7 @@ MonoBehaviour:
   prefab_Cameras:
   - {fileID: 62994276785131390, guid: e5c6557367a093047ad1f84e354b4fa0, type: 3}
   - {fileID: 8826860018447720959, guid: e03ddfc4e98e1d94c9ebc0c1703f326d, type: 3}
-  chancetospawncamera: 20
+  chancetospawncamera: 50
   grassVariants:
   - {fileID: 7510658147385533607, guid: 61171c43460630a4d9d31061449ddb70, type: 3}
   - {fileID: 6542674348259899008, guid: 276fb08ae3cd35c40a5e00555091c04c, type: 3}
