@@ -1,11 +1,18 @@
 using UnityEngine;
 using Pathfinding; // Import A* Pathfinding namespace
+using System.Collections;
+
 
 public class AstarScanner : MonoBehaviour
 {
-    void Start()
+    
+    IEnumerator Start()
     {
-        AstarPath.active.Scan(); // Runs a scan when the game starts
-        Debug.Log("A* Graph scanned at game start!");
+        // Wait for 1 second before continuing
+        yield return new WaitForSeconds(1f);
+        
+       
+       AstarPath.active.Scan();
     }
 }
+
