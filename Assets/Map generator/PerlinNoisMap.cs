@@ -13,8 +13,8 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_Wall_test;
     public GameObject prefab_Player;
     public GameObject prefab_Vines;
-    public GameObject prefab_Portal;
     public GameObject prefab_Enemy;
+    public GameObject prefab_Portal;
     public List<GameObject> prefab_Cameras = new List<GameObject>();
     public int chancetospawncamera = 10;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
@@ -146,8 +146,7 @@ public class PerlinNoisMap : MonoBehaviour
 
         SimulateErosion(); // Apply erosion after map generation.
         PlacePortal(); // Place the portal after erosion.
-        SummonEnemy(); // Summon the enemy after placing the portal.
-        
+        SummonEnemy();
     }
 
     int GetIdUsingPerlin(int x, int y)
@@ -312,6 +311,7 @@ void PlacePortal()
         Debug.Log($"Portal spawned at {selectedPosition}");
 
         SummonPlayer(selectedPosition);
+        
     }
     else
     {
@@ -320,9 +320,10 @@ void PlacePortal()
 }
 
 void SummonEnemy()
-    {
-        GameObject enemy  = Instantiate(prefab_Enemy, new Vector3 (20,20,0), transform.rotation);
-    }
+{
+    GameObject enemy = Instantiate(prefab_Enemy, transform);
+    enemy.transform.position = new Vector3(20, 20, 0);
+}
 
 void SummonPlayer(Vector3Int chosenPosition)
 {
