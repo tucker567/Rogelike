@@ -19,6 +19,8 @@ public class PerlinNoisMap : MonoBehaviour
     public int chancetospawncamera = 10;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
+    public int enemyCount = 5;
+
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
     // % of vines to light stone tiles
@@ -194,7 +196,6 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-    
     void SimulateErosion()
     {
         for (int i = 0; i < numberOfDroplets; i++)
@@ -249,91 +250,148 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-void PlacePortal()
-{
-    if (grassVariants == null || grassVariants.Count == 0)
+    void PlacePortal()
     {
-        Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
-        return;
-    }
-
-    Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
-
-    // Scan the entire map width and height.
-    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
-    {
-        for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+        if (grassVariants == null || grassVariants.Count == 0)
         {
-            if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected.
-            {
-                if (!columnYValues.ContainsKey(x))
-                    columnYValues[x] = new List<int>();
+            Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
+            return;
+        }
 
-                columnYValues[x].Add(y);
+        Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
+
+        // Scan the entire map width and height.
+        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+        {
+            for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+            {
+                if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected.
+                {
+                    if (!columnYValues.ContainsKey(x))
+                        columnYValues[x] = new List<int>();
+
+                    columnYValues[x].Add(y);
+                }
             }
+        }
+
+        if (columnYValues.Count == 0)
+        {
+            Debug.LogWarning("No light stone tiles detected on the tilemap.");
+            return;
+        }
+
+        List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
+
+        foreach (var entry in columnYValues)
+        {
+            int x = entry.Key;
+            List<int> yValues = entry.Value;
+            yValues.Sort();
+
+            for (int i = 1; i < yValues.Count; i++)
+            {
+                int prevY = yValues[i - 1];
+                int currentY = yValues[i];
+
+                if (currentY - prevY > 1)
+                {
+                    int portalY = prevY + 1;
+                    possiblePortalPositions.Add(new Vector3Int(x, portalY, 0));
+                }
+            }
+        }
+
+        if (possiblePortalPositions.Count > 0)
+        {
+            // Select a random position from the list of possible portal positions.
+            Vector3Int selectedPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
+
+            // Place the portal at the selected position
+            GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, + 0.1f), Quaternion.identity);
+            Debug.Log($"Portal spawned at {selectedPosition}");
+
+            SummonPlayer(selectedPosition);
+        }
+        else
+        {
+            Debug.LogWarning("No valid portal positions found!");
         }
     }
 
-    if (columnYValues.Count == 0)
+    void SummonEnemy()
     {
-        Debug.LogWarning("No light stone tiles detected on the tilemap.");
-        return;
-    }
+        List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
-    List<Vector3Int> possiblePortalPositions = new List<Vector3Int>();
-
-    foreach (var entry in columnYValues)
-    {
-        int x = entry.Key;
-        List<int> yValues = entry.Value;
-        yValues.Sort();
-
-        for (int i = 1; i < yValues.Count; i++)
+        // Step 1: Find all gray stone tiles by tile ID. (0)
+        foreach (var entry in tile_Grid)
         {
-            int prevY = yValues[i - 1];
-            int currentY = yValues[i];
-
-            if (currentY - prevY > 1)
+            TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
+            if (tileProperties != null && tileProperties.tileID == 0)
             {
-                int portalY = prevY + 1;
-                possiblePortalPositions.Add(new Vector3Int(x, portalY, 0));
+                grayStoneTiles.Add(entry);
             }
+        }
+
+        if (grayStoneTiles.Count == 0)
+        {
+            Debug.LogWarning("No gray stone tiles found.");
+            return;
+        }
+
+        Debug.Log($"Number of gray stone tiles found: {grayStoneTiles.Count}");
+
+        int spawnedEnemies = 0;
+        int attempts = 0;
+        int maxAttempts = enemyCount * 10; // Prevent potential infinite loops
+
+        while (spawnedEnemies < enemyCount && attempts < maxAttempts)
+        {
+            attempts++;
+            KeyValuePair<(int, int), GameObject> randomTile = grayStoneTiles[Random.Range(0, grayStoneTiles.Count)];
+            (int x, int y) = randomTile.Key;
+
+            // Ensure no light stone tile is present above.
+            if (lightStoneTilemap.HasTile(new Vector3Int(x, y + 1, 0)))
+            {
+                continue;
+            }
+
+            int enemyY = y + 1; // Spawn enemy above the gray stone tile
+
+            // Check again if a light stone tile is present at the enemy spawn position.
+            if (lightStoneTilemap.HasTile(new Vector3Int(x, enemyY, 0)))
+            {
+                continue;
+            }
+
+            if (prefab_Enemy == null)
+            {
+                Debug.LogWarning("Enemy prefab is not assigned in the inspector.");
+                return;
+            }
+
+            GameObject enemy = Instantiate(prefab_Enemy, new Vector3(x, enemyY, -0.01f), Quaternion.identity);
+            enemy.name = $"Enemy_x{x}_y{enemyY}";
+            tile_Grid[(x, enemyY)] = enemy;
+            spawnedEnemies++;
+        }
+
+        if (spawnedEnemies < enemyCount)
+        {
+            Debug.LogWarning($"Only spawned {spawnedEnemies} out of the requested {enemyCount} enemies.");
         }
     }
 
-    if (possiblePortalPositions.Count > 0)
+    void SummonPlayer(Vector3Int chosenPosition)
     {
-        // Select a random position from the list of possible portal positions.
-        Vector3Int selectedPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
+        GameObject player = Instantiate(prefab_Player, transform);
+        player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.2f, 0);
 
-        // Place the portal at the selected position
-        GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, + 0.1f), Quaternion.identity);
-        Debug.Log($"Portal spawned at {selectedPosition}");
-
-        SummonPlayer(selectedPosition);
-        
+        SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+        playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
+        playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
     }
-    else
-    {
-        Debug.LogWarning("No valid portal positions found!");
-    }
-}
-
-void SummonEnemy()
-{
-    GameObject enemy = Instantiate(prefab_Enemy, transform);
-    enemy.transform.position = new Vector3(20, 20, 0);
-}
-
-void SummonPlayer(Vector3Int chosenPosition)
-{
-    GameObject player = Instantiate(prefab_Player, transform);
-    player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.2f, 0);
-
-    SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
-    playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
-    playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
-}
 
     public class Droplet
     {
@@ -509,49 +567,47 @@ void SummonPlayer(Vector3Int chosenPosition)
         }
     }
 
-
     void PlaceCamerasOnBottom()
-{
-    GameObject cameraParent = new GameObject("Cameras");
-    cameraParent.transform.parent = transform;
-
-    // Loop through columns (x-values)
-    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
     {
-        int? lastSolidTileY = null; // Track the last solid tile’s y-coordinate
+        GameObject cameraParent = new GameObject("Cameras");
+        cameraParent.transform.parent = transform;
 
-        // Loop from top to bottom to detect height jumps
-        for (int y = mapHeight / 2; y >= -mapHeight / 2; y--)
+        // Loop through columns (x-values)
+        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
         {
-            Vector3Int tilePosition = new Vector3Int(x, y, 0);
+            int? lastSolidTileY = null; // Track the last solid tile’s y-coordinate
 
-            if (lightStoneTilemap.HasTile(tilePosition)) 
+            // Loop from top to bottom to detect height jumps
+            for (int y = mapHeight / 2; y >= -mapHeight / 2; y--)
             {
-                // If there was a previous solid tile and the gap between them is more than 1, it's a height jump
-                if (lastSolidTileY != null && y < lastSolidTileY - 1)
+                Vector3Int tilePosition = new Vector3Int(x, y, 0);
+
+                if (lightStoneTilemap.HasTile(tilePosition)) 
                 {
-                    // Check if we should spawn a camera based on the chance
-                    if (Random.Range(0, chancetospawncamera) == 0)
+                    // If there was a previous solid tile and the gap between them is more than 1, it's a height jump
+                    if (lastSolidTileY != null && y < lastSolidTileY - 1)
                     {
-                        Vector3 cameraPosition = new Vector3(x, lastSolidTileY.Value - 1, -0.01f);
-                        
-                        // Select a random camera prefab from the list
-                        GameObject selectedCameraPrefab = prefab_Cameras[Random.Range(0, prefab_Cameras.Count)];
-                        
-                        GameObject camera = Instantiate(selectedCameraPrefab, cameraPosition, Quaternion.identity);
-                        camera.transform.parent = cameraParent.transform;
-                        camera.name = $"Camera_x{x}_y{lastSolidTileY.Value - 1}";
+                        // Check if we should spawn a camera based on the chance
+                        if (Random.Range(0, chancetospawncamera) == 0)
+                        {
+                            Vector3 cameraPosition = new Vector3(x, lastSolidTileY.Value - 1, -0.01f);
+                            
+                            // Select a random camera prefab from the list
+                            GameObject selectedCameraPrefab = prefab_Cameras[Random.Range(0, prefab_Cameras.Count)];
+                            
+                            GameObject camera = Instantiate(selectedCameraPrefab, cameraPosition, Quaternion.identity);
+                            camera.transform.parent = cameraParent.transform;
+                            camera.name = $"Camera_x{x}_y{lastSolidTileY.Value - 1}";
 
-                        // Store camera in tile Grid
-                        tile_Grid[(x, lastSolidTileY.Value - 1)] = camera;
+                            // Store camera in tile Grid
+                            tile_Grid[(x, lastSolidTileY.Value - 1)] = camera;
+                        }
                     }
-                }
 
-                lastSolidTileY = y; // Update last solid tile position
+                    lastSolidTileY = y; // Update last solid tile position
+                }
             }
         }
+        Debug.Log("Cameras placement complete!");
     }
-    Debug.Log("Cameras placement complete!");
-}
-
 }
