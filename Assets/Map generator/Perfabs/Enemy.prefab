@@ -142,6 +142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3766076487179113982}
   - component: {fileID: 5879531907227313625}
+  - component: {fileID: 5299331039938751571}
   m_Layer: 0
   m_Name: EVILKNIGHTGFX
   m_TagString: Untagged
@@ -219,3 +220,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5299331039938751571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7266375765112736021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2ad21bad3d28c046a4d8f6f3660b9ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiPath: {fileID: 1473354514597808690}
