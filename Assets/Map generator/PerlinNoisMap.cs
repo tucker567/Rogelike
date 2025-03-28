@@ -72,10 +72,13 @@ public class PerlinNoisMap : MonoBehaviour
         CreateTileset();
         CreateTileGroups();
         GenerateMap();
+        SimulateErosion();
         PlaceGrassOnSurface();
         PlaceCamerasOnBottom();
         PlaceVinesOnRandomGrayStone();
         CreateBarrier();
+        PlacePortal();
+        
 
         Debug.Log("Map generation complete.");
     }
@@ -130,22 +133,22 @@ public class PerlinNoisMap : MonoBehaviour
 
     void GenerateMap()
     {
-        // Loop over x and y from -mapWidth/2 to mapWidth/2 and -mapHeight/2 to mapHeight/2.
+        Debug.Log("Generating Map...");
+        CreateTileset();
+        CreateTileGroups();
+
         for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
         {
             for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
             {
                 int tile_id = GetIdUsingPerlin(x, y);
-                if (!tile_Grid.ContainsKey((x, y)) || tile_Grid[(x, y)] == null)
-                {
-                    CreateTile(tile_id, x, y);
-                }
+                CreateTile(tile_id, x, y);
             }
         }
 
-        SimulateErosion(); // Apply erosion after map generation.
-        PlacePortal(); // Place the portal after erosion.
-        
+        Debug.Log("Map generation complete.");
+
+        Debug.Log("Map is ready.");
     }
 
     int GetIdUsingPerlin(int x, int y)
@@ -250,6 +253,7 @@ public class PerlinNoisMap : MonoBehaviour
 
 void PlacePortal()
 {
+    Debug.Log("Placing portal...");
     if (grassVariants == null || grassVariants.Count == 0)
     {
         Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");

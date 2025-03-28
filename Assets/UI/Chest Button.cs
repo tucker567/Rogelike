@@ -11,19 +11,14 @@ public class ChestInteraction : MonoBehaviour
     public Vector3 textOffset = new Vector3(0, 1.5f, 0); // Adjust this if needed
     public float floatingTextYOffset = -0.5f; // Public Y offset for floating text
 
-    private void OnEnable()
+    private void Start()
     {
-        GameManager.OnMapGenerated += InitializeChest; // Subscribe to event
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnMapGenerated -= InitializeChest; // Unsubscribe to prevent memory leaks
+        InitializeChest(); // Initialize chest on start
     }
 
     private void InitializeChest()
     {
-        Debug.Log("Initializing Chest after Map is Ready...");
+        Debug.Log("Initializing Chest...");
 
         if (chestCanvas != null)
         {
