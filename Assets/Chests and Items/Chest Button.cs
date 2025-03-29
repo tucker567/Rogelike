@@ -10,6 +10,8 @@ public class ChestInteraction : MonoBehaviour
     private bool playerInRange = false;
     public Vector3 textOffset = new Vector3(0, 1.5f, 0); // Adjust this if needed
     public float floatingTextYOffset = -0.5f; // Public Y offset for floating text
+    public Item itemToGive; // Item to give when the chest is opened
+    public GameObject openchest; // Assign the open chest prefab here
 
     private void Start()
     {
@@ -66,6 +68,19 @@ public class ChestInteraction : MonoBehaviour
             {
                 Debug.Log("Chest Opened!");
                 floatingText.SetActive(false); // Hide text after opening
+
+                // Give item to the player
+                var inventory = GameObject.FindWithTag("Player").GetComponent<Inventory>();
+                if (inventory != null && itemToGive != null)
+                {
+                    inventory.AddItem(itemToGive);
+                    Destroy(gameObject); // Destroy the chest after giving the item
+                    Instantiate(openchest, transform.position, Quaternion.identity); // Instantiate the open chest prefab
+                }
+                else
+                {
+                    Debug.LogError("Inventory or itemToGive is missing!");
+                }
             }
         }
     }
