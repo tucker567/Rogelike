@@ -5891,6 +5891,58 @@ MonoBehaviour:
   sedimentCapacity: 0.2
   erosionStrength: 0.01
   spawnDecay: 0.17
+--- !u!1 &1769517688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1769517690}
+  - component: {fileID: 1769517689}
+  m_Layer: 0
+  m_Name: ItemEffects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1769517689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769517688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1feefcc32b8eed409553193c03dd32e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  jumpHeight: 5
+  wallJumpHeight: 5
+  maxHealth: 100
+  finalMoveSpeed: 0
+  finalJumpHeight: 0
+  finalWallJumpHeight: 0
+  finalMaxHealth: 0
+--- !u!4 &1769517690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769517688}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -47.30408, y: 11.35632, z: -0.03462652}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1910678765
 GameObject:
   m_ObjectHideFlags: 0
@@ -5986,3 +6038,4 @@ SceneRoots:
   - {fileID: 558331725}
   - {fileID: 525508138}
   - {fileID: 170889049}
+  - {fileID: 1769517690}

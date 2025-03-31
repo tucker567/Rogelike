@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
-  m_Name: SeedBoostItem
+  m_Script: {fileID: 11500000, guid: 23d0fcd333b04f842994f44edeeb0543, type: 3}
+  m_Name: Jump Boost
   m_EditorClassIdentifier: 
-  itemName: SpeedBoost
-  icon: {fileID: 7152930139536384079, guid: b89e7e29385c06741bdabcb3e9c0f48d, type: 3}
-  description: makes you faster
-  maxStacks: 999
+  JumpHeightPerStack: 2

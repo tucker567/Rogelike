@@ -5,8 +5,9 @@ public class PlayerMovement : MonoBehaviour
     public ParticleSystem Dust;
 
     // Movement parameters
-    [SerializeField] private float speed = 8f;
-    [SerializeField] private float jumpPower = 16f;
+    private float moveSpeed => PlayerStatsEffects.Instance.finalMoveSpeed; 
+    private float jumpHeight => PlayerStatsEffects.Instance.finalJumpHeight;
+
     private float horizontal;
     private bool isFacingRight = true;
 
@@ -46,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         // Jumping: if jump pressed and on the ground, then jump
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpHeight);
             CreateDust();
         }
 
@@ -65,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isWallJumping)
         {
-            rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
         }
     }
 

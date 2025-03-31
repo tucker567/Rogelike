@@ -13,6 +13,21 @@ public class Inventory : MonoBehaviour
             items[item] = 1;
 
         ItemUIManager.Instance.UpdateUI(items);
+
+        RecalculateAllItemStats();
+    }
+
+    private void RecalculateAllItemStats()
+    {
+        PlayerStatsEffects.Instance.ResetStatsToBase();
+        
+        foreach (var kvp in items)
+        {
+            if (kvp.Key.Effect is ItemEffects Effect)
+            { 
+                Effect.ApplyEffect(gameObject, kvp.Value);
+            }
+        }
     }
 
     public bool HasItem(Item item) => items.ContainsKey(item);
