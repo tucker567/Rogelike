@@ -5900,7 +5900,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1769517690}
-  - component: {fileID: 1769517689}
+  - component: {fileID: 1769517691}
   m_Layer: 0
   m_Name: ItemEffects
   m_TagString: Untagged
@@ -5908,26 +5908,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1769517689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1769517688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1feefcc32b8eed409553193c03dd32e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpHeight: 5
-  wallJumpHeight: 5
-  maxHealth: 100
-  finalMoveSpeed: 0
-  finalJumpHeight: 0
-  finalWallJumpHeight: 0
-  finalMaxHealth: 0
 --- !u!4 &1769517690
 Transform:
   m_ObjectHideFlags: 0
@@ -5943,6 +5923,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1769517691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769517688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1feefcc32b8eed409553193c03dd32e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  jumpHeight: 10
+  finalMoveSpeed: 0
+  finalJumpHeight: 0
 --- !u!1 &1910678765
 GameObject:
   m_ObjectHideFlags: 0

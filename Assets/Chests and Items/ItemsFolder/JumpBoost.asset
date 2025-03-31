@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: JumpBoost
   icon: {fileID: 944511563129996037, guid: 7db867efe7ecb5c4d948db621d573aa5, type: 3}
-  description: Imcreses jump high
+  description: Your jumps get higher with every stack,  including wall jumps. Stacks
+    provide diminishing returns, capping at +100% height.
   maxStacks: 999
   Effect: {fileID: 11400000, guid: b115a3cf729513148b93366de26e46d2, type: 2}

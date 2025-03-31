@@ -110,7 +110,8 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && wallJumpCount < maxWallJumps)
         {
             isWallJumping = true;
-            rb.linearVelocity = new Vector2(wallJumpingPower.x * wallJumpingDirection, wallJumpingPower.y);
+            float jumpY = PlayerStatsEffects.Instance.finalJumpHeight;
+            rb.linearVelocity = new Vector2(wallJumpingPower.x * wallJumpingDirection, jumpY);
             wallJumpingCounter = 0f;
             wallJumpCount++; // Increment the wall jump count
 

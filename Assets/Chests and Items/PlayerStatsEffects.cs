@@ -6,7 +6,7 @@ public class PlayerStatsEffects : MonoBehaviour
 
     [Header("Base Stats")]
     public float moveSpeed = 5f;
-    public float jumpHeight = 5f;
+    public float jumpHeight = 10f;
     
     [Header("Final Stats (With Item Effects)")]
     public float finalMoveSpeed;
