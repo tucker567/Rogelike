@@ -17,10 +17,10 @@ public class SetEnemyTarget : MonoBehaviour
             return;
         }
 
-        ZombieTargetsPlayer();
+        EnemyTargetsPlayer();
     }
 
-    public void ZombieTargetsPlayer() 
+    public void EnemyTargetsPlayer() 
     {
         target = GameObject.FindGameObjectWithTag("Player");
 
