@@ -10,6 +10,8 @@ public class JumpBoostEffect : ScriptableObject, ItemEffects
         var stats = PlayerStatsEffects.Instance;
         float baseJump = stats.jumpHeight; // base value
         float bonusMultiplier = 1 + 0.25f * Mathf.Log(stackCount + 1, 2); // gentle curve
+
         stats.finalJumpHeight = baseJump * bonusMultiplier;
+        stats.finalWallJumpingPower = stats.wallJumpingPower * bonusMultiplier; // Reflect scaled wall jump strength
     }
 }

@@ -5937,8 +5937,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpHeight: 10
+  wallJumpingPower: {x: 4, y: 8}
+  maxWallJumps: 4
   finalMoveSpeed: 0
   finalJumpHeight: 0
+  finalWallJumpingPower: {x: 0, y: 0}
+  finalMaxWallJumps: 0
 --- !u!1 &1910678765
 GameObject:
   m_ObjectHideFlags: 0

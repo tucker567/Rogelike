@@ -145,6 +145,8 @@ MonoBehaviour:
   CommonItems:
   - {fileID: 11400000, guid: ffe8a808650609549bf13d86e4dea10c, type: 2}
   - {fileID: 11400000, guid: 78a70457122dc1840bc6e816012f5c50, type: 2}
+  - {fileID: 11400000, guid: c002807b4c190de4e80f7e0dfd4a1774, type: 2}
+  - {fileID: 11400000, guid: 290a34a3b9ec4f548a27de587e2fb8f0, type: 2}
   openchest: {fileID: 7522314853615897530, guid: 3d82bd5256db9ea45ac5d3334e1e7fc6, type: 3}
 --- !u!1 &490743125253414541
 GameObject:

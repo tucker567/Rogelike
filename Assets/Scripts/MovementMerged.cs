@@ -27,11 +27,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     [SerializeField] private float wallJumpingDuration = 0.4f;
-    [SerializeField] private Vector2 wallJumpingPower = new Vector2(8f, 16f);
-
+    private float wallJumpingPowerX => PlayerStatsEffects.Instance.finalWallJumpingPower.x; // Horizontal power
+    private float wallJumpingPowerY => PlayerStatsEffects.Instance.finalWallJumpingPower.y; // Vertical power
     // Wall jump limit
     private int wallJumpCount = 0;
-    private const int maxWallJumps = 4;
+    private float maxWallJumps => PlayerStatsEffects.Instance.finalMaxWallJumps; // Maximum number of wall jumps
 
     private void Update()
     {
@@ -64,6 +64,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (PlayerStatsEffects.Instance == null)
+        {
+            Debug.LogError("PlayerStatsEffects.Instance is null. Ensure it is properly initialized in the scene."); // Added error log
+            return; // Prevent further execution
+        }
+
         if (!isWallJumping)
         {
             rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
@@ -110,8 +116,9 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && wallJumpCount < maxWallJumps)
         {
             isWallJumping = true;
-            float jumpY = PlayerStatsEffects.Instance.finalJumpHeight;
-            rb.linearVelocity = new Vector2(wallJumpingPower.x * wallJumpingDirection, jumpY);
+            float jumpX = wallJumpingPowerX; // Use the x component for horizontal velocity
+            float jumpY = wallJumpingPowerY; // Use the y component for vertical velocity
+            rb.linearVelocity = new Vector2(jumpX * wallJumpingDirection, jumpY); // Corrected from linearVelocity to velocity
             wallJumpingCounter = 0f;
             wallJumpCount++; // Increment the wall jump count
 

@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
-  m_Name: JumpBoost
+  m_Name: WallJumpBoost
   m_EditorClassIdentifier: 
-  itemName: JumpBoost
-  icon: {fileID: 944511563129996037, guid: 7db867efe7ecb5c4d948db621d573aa5, type: 3}
-  description: All your jumps get higher with every stack,  including wall jumps.
-    Stacks provide diminishing returns, capping at +100% height.
+  itemName: WallJumpBoost
+  icon: {fileID: -8155056962410448219, guid: 37d393c892662f34699e2143b9b6fdff, type: 3}
+  description: 
   maxStacks: 999
-  Effect: {fileID: 11400000, guid: b115a3cf729513148b93366de26e46d2, type: 2}
+  Effect: {fileID: 11400000, guid: 6b88bd5e2eb10964281debdf69084b02, type: 2}
