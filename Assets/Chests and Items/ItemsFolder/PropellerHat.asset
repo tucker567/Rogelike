@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
-  m_Name: GodSandal
+  m_Name: PropellerHat
   m_EditorClassIdentifier: 
-  itemName: God Sandal
-  icon: {fileID: 7048115786317181715, guid: 324fce6429ea44b4da17fda5349fb1ca, type: 3}
-  description: +1 extra wall jump per stack.
-  maxStacks: 999
-  Effect: {fileID: 11400000, guid: 5d2a2ff56a3d29147b21703f4da57518, type: 2}
+  itemName: PropellerHat
+  icon: {fileID: -3357746000930847127, guid: 4135fe70263857844b7bcfff3609457d, type: 3}
+  description: Reduces gravity, making you fall slower and feel floatier with each
+    stack. Has no efect past 3 stacks.
+  maxStacks: 3
+  Effect: {fileID: 11400000, guid: 5e034a29aede8894ebe794b87e224561, type: 2}

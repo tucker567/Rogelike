@@ -60,6 +60,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Flip the character based on horizontal input
         DirectionFlip();
+
+        // Apply gravity scale
+        rb.gravityScale = PlayerStatsEffects.Instance.finnalGravityScale; // Use the final gravity scale from PlayerStatsEffects
     }
 
     private void FixedUpdate()

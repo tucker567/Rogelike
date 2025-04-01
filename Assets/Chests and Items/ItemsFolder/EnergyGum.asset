@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
-  m_Name: SeedBoostItem
+  m_Name: EnergyGum
   m_EditorClassIdentifier: 
-  itemName: SpeedBoost
+  itemName: Energy Gum
   icon: {fileID: 7152930139536384079, guid: b89e7e29385c06741bdabcb3e9c0f48d, type: 3}
   description: Move speed increases sharply at first (up to +39%), then slowly approaches
     +100% with more stacks.
