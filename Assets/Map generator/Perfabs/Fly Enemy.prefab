@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6112717847634664776}
   - component: {fileID: 5022440379827588474}
   - component: {fileID: 2251018848218786970}
+  - component: {fileID: 4852638602242488639}
   m_Layer: 0
   m_Name: Fly Enemy
   m_TagString: Untagged
@@ -160,6 +161,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &4852638602242488639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3220360337309964950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8332552905798af42b83112aa3f73217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!1001 &8866962485694208213
 PrefabInstance:
   m_ObjectHideFlags: 0
