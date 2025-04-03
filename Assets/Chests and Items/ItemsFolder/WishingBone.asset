@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
+  m_Name: WishingBone
+  m_EditorClassIdentifier: 
+  itemName: WishingBone
+  icon: {fileID: 7345341808698088542, guid: 9fb9da30d20e5de4ca6af2ade549b339, type: 3}
+  description: 
+  maxStacks: 999
+  Effect: {fileID: 11400000, guid: 8cf085af2e3c3a047b54d9eca67b6f85, type: 2}
