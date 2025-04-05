@@ -4,6 +4,8 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public Dictionary<Item, int> items = new();
+    public GameObject poppedItemPrefab; // Assign in Inspector or dynamically
+
 
     public void AddItem(Item item)
     {
@@ -15,6 +17,17 @@ public class Inventory : MonoBehaviour
         ItemUIManager.Instance.UpdateUI(items);
 
         RecalculateAllItemStats();
+        
+        if (poppedItemPrefab != null)
+        {
+            GameObject popped = Instantiate(poppedItemPrefab, transform.position, Quaternion.identity);
+            SpriteRenderer renderer = popped.GetComponent<SpriteRenderer>();
+            if (renderer != null)
+            {
+                renderer.sprite = item.icon; // Set the icon to match the item
+            }
+        }
+
     }
 
     private void RecalculateAllItemStats()

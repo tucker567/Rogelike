@@ -150,6 +150,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3356aced1d86a0e4cbef967f41561469, type: 2}
   - {fileID: 11400000, guid: 1d3b4033fa5272d4aa48a4531db1b4e0, type: 2}
   openchest: {fileID: 7522314853615897530, guid: 3d82bd5256db9ea45ac5d3334e1e7fc6, type: 3}
+  popItemPrefab: {fileID: 377374053238590398, guid: 46a28892c6b5f644bbe15516a4eba3de, type: 3}
+  popOffsetY: 0.5
 --- !u!1 &490743125253414541
 GameObject:
   m_ObjectHideFlags: 0
