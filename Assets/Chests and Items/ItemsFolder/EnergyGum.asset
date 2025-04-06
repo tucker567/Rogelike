@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnergyGum
   m_EditorClassIdentifier: 
   itemName: Energy Gum
-  icon: {fileID: 7152930139536384079, guid: b89e7e29385c06741bdabcb3e9c0f48d, type: 3}
+  icon: {fileID: 4337684191699249041, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
   description: Move speed increases sharply at first (up to +39%), then slowly approaches
     +100% with more stacks.
   maxStacks: 999

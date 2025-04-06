@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GodSandal
   m_EditorClassIdentifier: 
   itemName: God Sandal
-  icon: {fileID: 7048115786317181715, guid: 324fce6429ea44b4da17fda5349fb1ca, type: 3}
+  icon: {fileID: -488721925442295091, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
   description: +1 extra wall jump per stack.
   maxStacks: 999
   Effect: {fileID: 11400000, guid: 5d2a2ff56a3d29147b21703f4da57518, type: 2}

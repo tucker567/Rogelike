@@ -3,8 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WishBoneEffect", menuName = "Items/Effects/Wish Bone")]
 public class WishBoneEffect : ScriptableObject, ItemEffects
 {
-    public float baseExtraDropChance = 0.2f;
-    public float dropDecayRate = 0.5f;
+    public float baseExtraDropChance = 0.15f;
+    public float dropDecayRate = 0.75f;
 
     public void ApplyEffect(GameObject player, int stackCount)
     {

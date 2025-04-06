@@ -5893,7 +5893,7 @@ MonoBehaviour:
   minVineLength: 2
   maxVineLength: 6
   mapWidth: 160
-  mapHeight: 90
+  mapHeight: 160
   magnitude: 9
   frequency: 0.75
   noiseThreshold: 0.5

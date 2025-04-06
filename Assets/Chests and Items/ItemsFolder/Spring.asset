@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
-  m_Name: TendonTape
+  m_Name: Spring
   m_EditorClassIdentifier: 
-  itemName: Tendon Tape
-  icon: {fileID: -952768532427271477, guid: b062347138d06934796e5e28903f6ced, type: 3}
+  itemName: Spring
+  icon: {fileID: 1574881976, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
   description: All your jumps get higher with every stack,  including wall jumps.
     Stacks provide diminishing returns, capping at +100% height.
   maxStacks: 999

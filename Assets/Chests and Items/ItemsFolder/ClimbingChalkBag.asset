@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ClimbingChalkBag
   m_EditorClassIdentifier: 
   itemName: RunningShoes
-  icon: {fileID: -8155056962410448219, guid: 37d393c892662f34699e2143b9b6fdff, type: 3}
+  icon: {fileID: 8033092973025764044, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
   description: Increases wall jump strength (power) the more you stack.
   maxStacks: 999
   Effect: {fileID: 11400000, guid: 6b88bd5e2eb10964281debdf69084b02, type: 2}

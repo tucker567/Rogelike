@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WishingBone
   m_EditorClassIdentifier: 
   itemName: WishingBone
-  icon: {fileID: 7345341808698088542, guid: 9fb9da30d20e5de4ca6af2ade549b339, type: 3}
+  icon: {fileID: 1801263428120863714, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
   description: Chance to drop more items
   maxStacks: 999
   Effect: {fileID: 11400000, guid: 8cf085af2e3c3a047b54d9eca67b6f85, type: 2}

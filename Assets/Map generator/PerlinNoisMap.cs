@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class PerlinNoisMap : MonoBehaviour
 {
+    [Header("Tile Prefabs")]
     // Dictionaries to store prefabs and their groups.
     Dictionary<int, GameObject> tileset;
     Dictionary<int, GameObject> tileGroups;
@@ -21,16 +22,21 @@ public class PerlinNoisMap : MonoBehaviour
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
     // % of vines to light stone tiles
+
+    [Header("Vine Settings")]
     public float vinesToLightStoneRatio = 0.1f;
     // min vine length
     public int minVineLength = 1;
     // max vine length
     public int maxVineLength = 6;
 
+    [Header("Map Settings")]
+    // Map size settings.
     // Map dimensions (the map will be exactly mapWidth x mapHeight).
     public int mapWidth = 160;
     public int mapHeight = 90;
 
+    [Header("Noise Settings")]
     // Noise parameters
     public Dictionary<(int, int), GameObject> tile_Grid = new Dictionary<(int, int), GameObject>();
     public float magnitude = 10.0f;
@@ -40,11 +46,13 @@ public class PerlinNoisMap : MonoBehaviour
     // If you don't see any dark stone, try increasing it (e.g., to 0.6 or 0.7).
     public float noiseThreshold = 0.5f;
 
+    [Header("Seed Settings")]
     // Seed for randomization (-1 generates a random seed).
     public int seed = -1;
     int x_offset = 0;
     int y_offset = 0;
 
+    [Header("Erosion Settings")]
     // Erosion parameters
     public int numberOfDroplets = 1000;
     public float initialWaterAmount = 0.1f;

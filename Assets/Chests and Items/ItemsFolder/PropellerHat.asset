@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PropellerHat
   m_EditorClassIdentifier: 
   itemName: PropellerHat
-  icon: {fileID: -3357746000930847127, guid: 4135fe70263857844b7bcfff3609457d, type: 3}
+  icon: {fileID: -7573354855677281409, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
   description: Reduces gravity, making you fall slower and feel floatier with each
     stack. Has no efect past 3 stacks.
   maxStacks: 3

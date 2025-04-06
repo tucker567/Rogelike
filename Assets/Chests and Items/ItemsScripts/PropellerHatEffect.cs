@@ -3,8 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PropellerHatEffect", menuName = "Items/Effects/Propeller Hat")]
 public class PropellerHatEffect : ScriptableObject, ItemEffects
 {
-    public float gravityReductionPerStack = 0.3f;
-    public float minGravityScale = 2.0f;
+    public float gravityReductionPerStack = 0.8f;
+    public float minGravityScale = 0.5f;
 
     public void ApplyEffect(GameObject player, int stackCount)
     {

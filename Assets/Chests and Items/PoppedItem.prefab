@@ -102,10 +102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19c855e39fbfb7349b1b6cc39dcca839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLifetime: 2
-  maxLifetime: 5
-  fadeDuration: 1
+  flyToPlayerDelay: 1.25
+  flySpeed: 10
+  fadeSpeed: 5
   visualScale: {x: 0.7, y: 0.7, z: 1}
+  itemData: {fileID: 0}
 --- !u!50 &7410194954825108077
 Rigidbody2D:
   serializedVersion: 5
