@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
         // Jumping: if jump pressed and on the ground, then jump
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
+            Debug.Log("Jumping!");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpHeight);
             CreateDust();
         }

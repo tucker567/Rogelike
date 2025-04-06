@@ -5156,8 +5156,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dust: {fileID: 5984140329701800788}
-  speed: 9
-  jumpPower: 10
   rb: {fileID: 6930137965572382097}
   groundCheck: {fileID: 8791805695751671186}
   groundLayer:
@@ -5170,7 +5168,6 @@ MonoBehaviour:
   wallSlidingSpeed: 2
   wallJumpingTime: 0.2
   wallJumpingDuration: 0
-  wallJumpingPower: {x: 8, y: 10}
 --- !u!70 &5604389810371530708
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -5220,6 +5217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0f11567a0b9d754ea034729190ab8a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  poppedItemPrefab: {fileID: 377374053238590398, guid: 46a28892c6b5f644bbe15516a4eba3de, type: 3}
 --- !u!1 &8160311267529431995
 GameObject:
   m_ObjectHideFlags: 0

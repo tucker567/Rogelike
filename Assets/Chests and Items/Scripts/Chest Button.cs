@@ -110,52 +110,44 @@ public class ChestInteraction : MonoBehaviour
 
                 // Check for Wish Bone
                 Item wishBone = null;
-        foreach (var item in inventory.items.Keys)
-        {
-            Debug.Log($"[Wish Bone] Checking inventory item: {item.itemName}");
-
-            if (item.itemName == "WishingBone") // OR change this to match your item's name exactly
-            {
-                wishBone = item;
-                Debug.Log($"[Wish Bone] FOUND in inventory: {wishBone.itemName}");
-
-                if (wishBone.Effect != null)
+                foreach (var item in inventory.items.Keys)
                 {
-                    Debug.Log($"[Wish Bone] Effect assigned: {wishBone.Effect.GetType()}");
-                }
-                else
-                {
-                    Debug.LogWarning($"[Wish Bone] Effect is NULL! Make sure it's assigned in the item asset.");
-                }
-                break;
-            }
-        }
+                    Debug.Log($"[Wish Bone] Checking inventory item: {item.itemName}");
 
-
-                if (wishBone != null && wishBone.Effect is WishBoneEffect effect)
-                {
-                    int stacks = inventory.GetItemCount(wishBone);
-                    Debug.Log($"[Wish Bone] Found {stacks} stack(s)");
-
-                    for (int i = 1; i <= 10; i++)
+                    if (item.itemName == "WishingBone")
                     {
-                        float chance = WishBoneEffect.CalculateDropChance(i, stacks, effect.baseExtraDropChance, effect.dropDecayRate);
-                        Debug.Log($"[Wish Bone] Calculated chance for item {i}: {chance}");
-                        float roll = Random.value;
-                        Debug.Log($"Rolling... chance={chance}, roll={roll}");
-                        Debug.Log($"[Wish Bone] Roll #{i}: Chance={chance:P2}, Rolled={roll:F2}");
+                        wishBone = item;
+                        Debug.Log($"[Wish Bone] FOUND in inventory: {wishBone.itemName}");
 
-                        if (roll < chance)
+                        if (wishBone.Effect != null)
                         {
-                            Item bonus = CommonItems[Random.Range(0, CommonItems.Count)];
-                            inventory.AddItem(bonus);
-                            Debug.Log($"[Drop] Extra item {i}: {bonus.itemName}");
-                            totalItemsDropped++;
+                            Debug.Log($"[Wish Bone] Effect assigned: {wishBone.Effect.GetType()}");
                         }
                         else
                         {
-                            Debug.Log($"[Wish Bone] Roll #{i} failed. Stopping extra drops.");
-                            break;
+                            Debug.LogWarning($"[Wish Bone] Effect is NULL! Make sure it's assigned in the item asset.");
+                        }
+                        break;
+                    }
+                }
+
+                if (wishBone != null && wishBone.Effect != null)
+                {
+                    int stacks = inventory.GetItemCount(wishBone);
+                    float flatDropChance = 0.25f; // 25% chance per stack
+                    Debug.Log($"[Wish Bone] Rolling {stacks} times with {flatDropChance * 100}% chance per roll");
+
+                    for (int i = 0; i < stacks; i++)
+                    {
+                        float roll = Random.value;
+                        Debug.Log($"[Wish Bone] Roll {i + 1}: {roll:F2}");
+
+                        if (roll < flatDropChance)
+                        {
+                            Item bonus = CommonItems[Random.Range(0, CommonItems.Count)];
+                            inventory.AddItem(bonus);
+                            Debug.Log($"[Drop] Extra item from stack {i + 1}: {bonus.itemName}");
+                            totalItemsDropped++;
                         }
                     }
                 }

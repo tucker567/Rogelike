@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TendonTape
   m_EditorClassIdentifier: 
   itemName: Tendon Tape
-  icon: {fileID: 944511563129996037, guid: 7db867efe7ecb5c4d948db621d573aa5, type: 3}
+  icon: {fileID: -952768532427271477, guid: b062347138d06934796e5e28903f6ced, type: 3}
   description: All your jumps get higher with every stack,  including wall jumps.
     Stacks provide diminishing returns, capping at +100% height.
   maxStacks: 999
