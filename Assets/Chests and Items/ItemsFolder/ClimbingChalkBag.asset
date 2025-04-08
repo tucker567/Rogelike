@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7cdfe4cbe7821a43a224c56c67d840a, type: 3}
+  m_Name: ClimbingChalkBag
+  m_EditorClassIdentifier: 
+  itemName: RunningShoes
+  icon: {fileID: 8033092973025764044, guid: 2f585da47d0b93b4288649414184d64a, type: 3}
+  description: Increases wall jump strength (power) the more you stack.
+  maxStacks: 999
+  Effect: {fileID: 11400000, guid: 6b88bd5e2eb10964281debdf69084b02, type: 2}
