@@ -5670,7 +5670,7 @@ MonoBehaviour:
   - {fileID: 6542674348259899008, guid: 276fb08ae3cd35c40a5e00555091c04c, type: 3}
   - {fileID: 2067993645046636534, guid: 2aa513c1e8a2bc042b0f9ccbc346bfef, type: 3}
   - {fileID: 2531130273512054815, guid: e80d67fa38b9fba439afee346191ae61, type: 3}
-  enemyCount: 2
+  enemyCount: 10
   lightStoneTilemap: {fileID: 265719914}
   vinesToLightStoneRatio: 0.08
   minVineLength: 2

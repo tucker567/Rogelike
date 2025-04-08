@@ -5222,7 +5222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  updateDistance: 0.1
+  updateDistance: 0.5
   target: {fileID: 0}
   graphIndex: 0
 --- !u!114 &2421300736702548431
