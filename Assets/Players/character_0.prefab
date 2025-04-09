@@ -5023,6 +5023,7 @@ GameObject:
   - component: {fileID: 5604389810371530708}
   - component: {fileID: 5327266110587505415}
   - component: {fileID: 2421300736702548431}
+  - component: {fileID: -2488908512039712663}
   m_Layer: 3
   m_Name: character_0
   m_TagString: Player
@@ -5157,8 +5158,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dust: {fileID: 5984140329701800788}
-  speed: 9
-  jumpPower: 10
   rb: {fileID: 6930137965572382097}
   groundCheck: {fileID: 8791805695751671186}
   groundLayer:
@@ -5171,7 +5170,6 @@ MonoBehaviour:
   wallSlidingSpeed: 2
   wallJumpingTime: 0.2
   wallJumpingDuration: 0
-  wallJumpingPower: {x: 8, y: 10}
 --- !u!70 &5604389810371530708
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -5237,6 +5235,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987623bca0214c9429d3454c393ed55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2488908512039712663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608987066490057576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0f11567a0b9d754ea034729190ab8a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poppedItemPrefab: {fileID: 0}
 --- !u!1 &8160311267529431995
 GameObject:
   m_ObjectHideFlags: 0
