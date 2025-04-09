@@ -28,35 +28,25 @@ public class PerlinNoisMap : MonoBehaviour
 
     [Header("Vine Settings")]
     public float vinesToLightStoneRatio = 0.1f;
-    // min vine length
     public int minVineLength = 1;
-    // max vine length
     public int maxVineLength = 6;
 
     [Header("Map Settings")]
-    // Map size settings.
-    // Map dimensions (the map will be exactly mapWidth x mapHeight).
     public int mapWidth = 160;
     public int mapHeight = 90;
 
     [Header("Noise Settings")]
-    // Noise parameters
     public Dictionary<(int, int), GameObject> tile_Grid = new Dictionary<(int, int), GameObject>();
     public float magnitude = 10.0f;
     public float frequency = 1.0f;
-    
-    // Adjust this threshold so that lower Perlin values produce dark stone.
-    // If you don't see any dark stone, try increasing it (e.g., to 0.6 or 0.7).
     public float noiseThreshold = 0.5f;
 
     [Header("Seed Settings")]
-    // Seed for randomization (-1 generates a random seed).
     public int seed = -1;
     int x_offset = 0;
     int y_offset = 0;
 
     [Header("Erosion Settings")]
-    // Erosion parameters
     public int numberOfDroplets = 1000;
     public float initialWaterAmount = 0.1f;
     public float evaporationRate = 0.99f;
@@ -64,7 +54,6 @@ public class PerlinNoisMap : MonoBehaviour
     public float erosionStrength = 0.01f;
     
     // Public variable to adjust weighted spawn chance decay for grass variants.
-    // Lower values give a steeper drop-off in spawn chance.
     public float spawnDecay = 0.5f; 
 
     void Start()
@@ -73,7 +62,7 @@ public class PerlinNoisMap : MonoBehaviour
 
         // Generate a random seed if not provided.
         if (seed == -1)
-            seed = UnityEngine.Random.Range(0, 10000);
+            seed = Random.Range(0, 10000);
 
         x_offset = seed;
         y_offset = seed;
@@ -89,45 +78,17 @@ public class PerlinNoisMap : MonoBehaviour
         PlaceVinesOnRandomGrayStone();
         CreateBarrier();
         PlacePortal();
-        
+        SummonEnemy();
 
         Debug.Log("Map generation complete.");
-    }
-
-    void CreateBarrier()
-    {
-        GameObject wallGroup = new GameObject("BoundaryWalls");
-        wallGroup.transform.parent = transform;
-        wallGroup.transform.localPosition = Vector3.zero;
-
-        // Create walls along the left and right edges.
-        for (int y = -mapHeight / 2 - 1; y <= mapHeight / 2; y++)
-        {
-            CreateWallTile(-mapWidth / 2 - 1, y, wallGroup);
-            CreateWallTile(mapWidth / 2, y, wallGroup);
-        }
-
-        // Create walls along the top and bottom edges.
-        for (int x = -mapWidth / 2 - 1; x <= mapWidth / 2; x++)
-        {
-            CreateWallTile(x, -mapHeight / 2 - 1, wallGroup);
-            CreateWallTile(x, mapHeight / 2, wallGroup);
-        }
-    }
-
-    void CreateWallTile(int x, int y, GameObject wallGroup)
-    {
-        GameObject wallTile = Instantiate(prefab_Wall_test, wallGroup.transform);
-        wallTile.name = $"Wall_{x}_{y}";
-        wallTile.transform.localPosition = new Vector3(x, y, 0);
-        tile_Grid[(x, y)] = wallTile;
     }
 
     void CreateTileset()
     {
         tileset = new Dictionary<int, GameObject>();
-        tileset.Add(0, prefab_light_stone); // Using prefab for Light stone
-        // Note: The RuleTile for light stone is handled separately.
+        // Assuming tile ID 0 is for dark stone (instantiated prefab)
+        // and ID 1 is for light stone (using the RuleTile on the Tilemap).
+        tileset.Add(0, prefab_light_stone); 
     }
 
     void CreateTileGroups()
@@ -145,6 +106,7 @@ public class PerlinNoisMap : MonoBehaviour
     void GenerateMap()
     {
         Debug.Log("Generating Map...");
+        // Create tileset and tile groups (if needed again)
         CreateTileset();
         CreateTileGroups();
 
@@ -156,13 +118,7 @@ public class PerlinNoisMap : MonoBehaviour
                 CreateTile(tile_id, x, y);
             }
         }
-
         Debug.Log("Map generation complete.");
-
-        Debug.Log("Map is ready.");
-        SimulateErosion(); // Apply erosion after map generation.
-        PlacePortal(); // Place the portal after erosion.
-        SummonEnemy();
     }
 
     int GetIdUsingPerlin(int x, int y)
@@ -264,18 +220,11 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-void PlacePortal()
-{
-    Debug.Log("Placing portal...");
-    if (grassVariants == null || grassVariants.Count == 0)
     void PlacePortal()
     {
-        if (grassVariants == null || grassVariants.Count == 0)
-        {
-            Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
-            return;
-        }
+        Debug.Log("Placing portal...");
 
+        // Build dictionary of column x-values to available y-values where a light stone tile exists.
         Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
 
         // Scan the entire map width and height.
@@ -325,8 +274,8 @@ void PlacePortal()
             // Select a random position from the list of possible portal positions.
             Vector3Int selectedPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
 
-            // Place the portal at the selected position
-            GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, + 0.1f), Quaternion.identity);
+            // Place the portal at the selected position.
+            GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, 0.1f), Quaternion.identity);
             Debug.Log($"Portal spawned at {selectedPosition}");
 
             SummonPlayer(selectedPosition);
@@ -341,7 +290,7 @@ void PlacePortal()
     {
         List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
-        // Step 1: Find all gray stone tiles by tile ID. (0)
+        // Find all gray stone tiles by tile ID (assuming 0 is dark/gray stone).
         foreach (var entry in tile_Grid)
         {
             TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
@@ -407,8 +356,11 @@ void PlacePortal()
         player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.2f, 0);
 
         SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
-        playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
-        playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
+        if (playerRenderer != null)
+        {
+            playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
+            playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
+        }
     }
 
     public class Droplet
@@ -427,8 +379,8 @@ void PlacePortal()
 
     public class TileProperties : MonoBehaviour
     {
-        public int tileID; // Add tileID property.
-        public float height = 0.1f; // Default height.
+        public int tileID;
+        public float height = 0.1f;
     }
 
     void PlaceGrassOnSurface()
@@ -516,12 +468,11 @@ void PlacePortal()
     {
         List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
-        // Step 1: Find all gray stone tiles by tile ID. (0)
+        // Find all gray stone tiles by tile ID (0).
         foreach (var entry in tile_Grid)
         {
             TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
-
-            if (tileProperties != null && tileProperties.tileID == 0) // If 0 is gray stone.
+            if (tileProperties != null && tileProperties.tileID == 0)
             {
                 grayStoneTiles.Add(entry);
             }
@@ -536,7 +487,6 @@ void PlacePortal()
         Debug.Log($"Number of gray stone tiles found: {grayStoneTiles.Count}");
         int numVines = Mathf.CeilToInt(vinesToLightStoneRatio * grayStoneTiles.Count);
 
-        // Create a parent object for vines (for better organization).
         GameObject vinesParent = new GameObject("Vines");
         vinesParent.transform.parent = transform;
 
@@ -545,37 +495,27 @@ void PlacePortal()
             KeyValuePair<(int, int), GameObject> randomTile = grayStoneTiles[Random.Range(0, grayStoneTiles.Count)];
             (int x, int y) = randomTile.Key;
 
-            // Step 2: Ensure no light stone tile is present above.
             if (lightStoneTilemap.HasTile(new Vector3Int(x, y + 1, 0)))
             {
                 continue;
             }
 
-            // Step 3: Instantiate vines above the selected gray stone tile.
             if (prefab_Vines == null)
             {
                 Debug.LogWarning("Vine prefab is not assigned in the inspector.");
                 return;
             }
 
-            // Determine the random length for the vine.
             int vineLength = Random.Range(minVineLength, maxVineLength + 1);
 
             for (int j = 1; j <= vineLength; j++)
             {
                 int vineY = y + j;
-
-                // Ensure the vine does not grow outside the map boundaries.
                 if (vineY < -mapHeight / 2 || vineY > mapHeight / 2)
-                {
                     break;
-                }
 
-                // Ensure no light stone tile is present at the current position.
                 if (lightStoneTilemap.HasTile(new Vector3Int(x, vineY, 0)))
-                {
                     break;
-                }
 
                 GameObject vines = Instantiate(prefab_Vines, new Vector3(x, vineY, -0.01f), Quaternion.identity);
                 vines.name = $"Vines_x{x}_y{vineY}";
@@ -593,7 +533,7 @@ void PlacePortal()
         // Loop through columns (x-values)
         for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
         {
-            int? lastSolidTileY = null; // Track the last solid tile’s y-coordinate
+            int? lastSolidTileY = null;
 
             // Loop from top to bottom to detect height jumps
             for (int y = mapHeight / 2; y >= -mapHeight / 2; y--)
@@ -602,30 +542,53 @@ void PlacePortal()
 
                 if (lightStoneTilemap.HasTile(tilePosition)) 
                 {
-                    // If there was a previous solid tile and the gap between them is more than 1, it's a height jump
                     if (lastSolidTileY != null && y < lastSolidTileY - 1)
                     {
-                        // Check if we should spawn a camera based on the chance
                         if (Random.Range(0, chancetospawncamera) == 0)
                         {
                             Vector3 cameraPosition = new Vector3(x, lastSolidTileY.Value - 1, -0.01f);
-                            
-                            // Select a random camera prefab from the list
                             GameObject selectedCameraPrefab = prefab_Cameras[Random.Range(0, prefab_Cameras.Count)];
                             
                             GameObject camera = Instantiate(selectedCameraPrefab, cameraPosition, Quaternion.identity);
                             camera.transform.parent = cameraParent.transform;
                             camera.name = $"Camera_x{x}_y{lastSolidTileY.Value - 1}";
 
-                            // Store camera in tile Grid
                             tile_Grid[(x, lastSolidTileY.Value - 1)] = camera;
                         }
                     }
-
-                    lastSolidTileY = y; // Update last solid tile position
+                    lastSolidTileY = y;
                 }
             }
         }
         Debug.Log("Cameras placement complete!");
+    }
+
+    void CreateBarrier()
+    {
+        GameObject wallGroup = new GameObject("BoundaryWalls");
+        wallGroup.transform.parent = transform;
+        wallGroup.transform.localPosition = Vector3.zero;
+
+        // Create walls along the left and right edges.
+        for (int y = -mapHeight / 2 - 1; y <= mapHeight / 2; y++)
+        {
+            CreateWallTile(-mapWidth / 2 - 1, y, wallGroup);
+            CreateWallTile(mapWidth / 2, y, wallGroup);
+        }
+
+        // Create walls along the top and bottom edges.
+        for (int x = -mapWidth / 2 - 1; x <= mapWidth / 2; x++)
+        {
+            CreateWallTile(x, -mapHeight / 2 - 1, wallGroup);
+            CreateWallTile(x, mapHeight / 2, wallGroup);
+        }
+    }
+
+    void CreateWallTile(int x, int y, GameObject wallGroup)
+    {
+        GameObject wallTile = Instantiate(prefab_Wall_test, wallGroup.transform);
+        wallTile.name = $"Wall_{x}_{y}";
+        wallTile.transform.localPosition = new Vector3(x, y, 0);
+        tile_Grid[(x, y)] = wallTile;
     }
 }
