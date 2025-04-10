@@ -58,7 +58,7 @@ public class CharacterSelectManager : MonoBehaviour
     public void OnPlayButton()                      // wired to Play button
     {
         PlayerPrefs.SetInt("SelectedCharacterIndex", currentIndex);
-        SceneManager.LoadScene("map gen v1");         // replace with your map scene name
+        SceneManager.LoadScene("Map 1");         // replace with your map scene name
     }
 
     /* ---------- Helpers ---------- */
