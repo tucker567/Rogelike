@@ -9,19 +9,18 @@ public class ChestInteraction : MonoBehaviour
 {
     public Canvas chestCanvas; // Assign in the prefab
     public GameObject floatingText;
+    private bool playerInRange = false;
     public Vector3 textOffset = new Vector3(0, 1.5f, 0);
     public float floatingTextYOffset = -0.5f;
-    public List<Item> CommonItems; // List of items to give
-    public GameObject openchest; // Assign the open chest prefab here
+    public List<Item> CommonItems;
+    public GameObject openchest;
     public GameObject poppedItemPrefab; // 🔥 The item animation prefab
-
     public static Dictionary<Vector3, GameObject> openChestsDictionary = new Dictionary<Vector3, GameObject>();
-
-    private bool playerInRange = false;
     private bool chestOpened = false;
 
     private void Start()
     {
+        chestOpened = false;
         InitializeChest();
     }
 
@@ -32,7 +31,6 @@ public class ChestInteraction : MonoBehaviour
         if (chestCanvas != null)
         {
             chestCanvas.worldCamera = Camera.main;
-
             bool wasActive = chestCanvas.gameObject.activeSelf;
             if (!wasActive)
                 chestCanvas.gameObject.SetActive(true);
@@ -86,61 +84,108 @@ public class ChestInteraction : MonoBehaviour
         {
             chestCanvas.transform.position = transform.position + textOffset;
 
-            if (Input.GetKeyDown(KeyCode.E)) // Open chest
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("Chest Opened!");
+                Debug.Log("Chest Interact Key Pressed");
+
                 floatingText.SetActive(false);
+                if (chestOpened) return;
                 chestOpened = true;
 
-                // Select a random item
-                if (CommonItems != null && CommonItems.Count > 0)
+                var player = GameObject.FindWithTag("Player");
+                var inventory = player.GetComponent<Inventory>();
+
+                if (inventory == null || CommonItems == null || CommonItems.Count == 0)
                 {
-                    Item selectedItem = CommonItems[Random.Range(0, CommonItems.Count)];
-                    Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
-                    GameObject go    = Instantiate(poppedItemPrefab, spawnPos, Quaternion.identity);
+                    Debug.LogError("Inventory or CommonItems not found.");
+                    return;
+                }
 
-                    go.GetComponent<PoppedItem>().Initialize(selectedItem);
+                int totalItemsDropped = 0;
 
-                    // Find inventory and add item
-                    var player = GameObject.FindWithTag("Player");
-                    var inventory = player.GetComponent<Inventory>();
-                    if (inventory != null && selectedItem != null)
+                // Drop the guaranteed item
+                Item baseDrop = CommonItems[Random.Range(0, CommonItems.Count)];
+                // 🔥 No longer directly add to inventory — let the popped item handle it
+                if (poppedItemPrefab != null)
+                {
+                    GameObject popped = Instantiate(poppedItemPrefab, transform.position, Quaternion.identity);
+
+                    // Assign the item data to the popped item
+                    var poppedItemScript = popped.GetComponent<PoppedItem>();
+                    if (poppedItemScript != null)
                     {
-                        // 🔥 No longer directly add to inventory — let the popped item handle it
-                        if (poppedItemPrefab != null)
-                        {
-                            GameObject popped = Instantiate(poppedItemPrefab, transform.position, Quaternion.identity);
-
-                            // Assign the item data to the popped item
-                            var poppedItemScript = popped.GetComponent<PoppedItem>();
-                            if (poppedItemScript != null)
-                            {
-                                poppedItemScript.itemData = selectedItem;
-                            }
-                        }
-                        else
-                        {
-                            Debug.LogWarning("PoppedItemPrefab not assigned!");
-                        }
-
-                        // Spawn open chest prefab
-                        GameObject openChestInstance = Instantiate(openchest, transform.position, Quaternion.identity);
-                        if (!openChestsDictionary.ContainsKey(transform.position))
-                        {
-                            openChestsDictionary.Add(transform.position, openChestInstance);
-                        }
-
-                        Destroy(gameObject); // Remove this chest
-                    }
-                    else
-                    {
-                        Debug.LogError("Inventory or selected item is missing!");
+                        poppedItemScript.itemData = baseDrop;
                     }
                 }
                 else
                 {
-                    Debug.LogError("No items available to give!");
+                    Debug.LogWarning("PoppedItemPrefab not assigned!");
                 }
+                totalItemsDropped++;
+
+                // Check for Wish Bone
+                Item wishBone = null;
+                foreach (var item in inventory.items.Keys)
+                {
+                    Debug.Log($"[Wish Bone] Checking inventory item: {item.itemName}");
+
+                    if (item.itemName == "WishingBone")
+                    {
+                        wishBone = item;
+                        Debug.Log($"[Wish Bone] FOUND in inventory: {wishBone.itemName}");
+
+                        if (wishBone.Effect != null)
+                        {
+                            Debug.Log($"[Wish Bone] Effect assigned: {wishBone.Effect.GetType()}");
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[Wish Bone] Effect is NULL! Make sure it's assigned in the item asset.");
+                        }
+                        break;
+                    }
+                }
+
+                if (wishBone != null && wishBone.Effect != null)
+                {
+                    int stacks = inventory.GetItemCount(wishBone);
+                    float flatDropChance = 0.25f; // 25% chance per stack
+                    Debug.Log($"[Wish Bone] Rolling {stacks} times with {flatDropChance * 100}% chance per roll");
+
+                    for (int i = 0; i < stacks; i++)
+                    {
+                        float roll = Random.value;
+                        Debug.Log($"[Wish Bone] Roll {i + 1}: {roll:F2}");
+
+                        if (roll < flatDropChance)
+                        {
+                            Item bonus = CommonItems[Random.Range(0, CommonItems.Count)];
+                            // 🔥 No longer directly add to inventory — let the popped item handle it
+                            if (poppedItemPrefab != null)
+                            {
+                                GameObject popped = Instantiate(poppedItemPrefab, transform.position, Quaternion.identity);
+
+                                // Assign the item data to the popped item
+                                var poppedItemScript = popped.GetComponent<PoppedItem>();
+                                if (poppedItemScript != null)
+                                {
+                                    poppedItemScript.itemData = bonus;
+                                }
+                            }
+                            else
+                            {
+                                Debug.LogWarning("PoppedItemPrefab not assigned!");
+                            }
+                            totalItemsDropped++;
+                        }
+                    }
+                }
+
+                Debug.Log($"[Summary] Total items dropped from chest: {totalItemsDropped}");
+
+                GameObject opened = Instantiate(openchest, transform.position, Quaternion.identity);
+                openChestsDictionary.TryAdd(transform.position, opened);
+                Destroy(gameObject);
             }
         }
     }

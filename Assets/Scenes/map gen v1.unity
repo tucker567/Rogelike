@@ -5859,7 +5859,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8.7
+  orthographic size: 8.857142
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -6147,7 +6147,7 @@ MonoBehaviour:
   prefab_Wall_test: {fileID: 7809423276624819837, guid: 02208e4bbf2f5a7488a4bc612f01db77, type: 3}
   prefab_Vines: {fileID: 7045724845613158764, guid: 0f5f48ed16707834bab11ece864ae541, type: 3}
   prefab_Enemy: {fileID: 3220360337309964950, guid: 4c40a336e0755524d985fdda2864d5e1, type: 3}
-  prefab_Portal: {fileID: 1189084398896350488, guid: 64e267db24b99374eb3c6044dc62f21a, type: 3}
+  prefab_Portal: {fileID: 2350379680705998741, guid: 98e24a6da36967245b18550beeb1bb18, type: 3}
   prefab_Cameras:
   - {fileID: 62994276785131390, guid: e5c6557367a093047ad1f84e354b4fa0, type: 3}
   - {fileID: 8826860018447720959, guid: e03ddfc4e98e1d94c9ebc0c1703f326d, type: 3}

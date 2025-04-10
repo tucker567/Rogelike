@@ -278,7 +278,7 @@ public class PerlinNoisMap : MonoBehaviour
             Vector3Int selectedPosition = possiblePortalPositions[Random.Range(0, possiblePortalPositions.Count)];
 
             // Place the portal at the selected position.
-            GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, 0.1f), Quaternion.identity);
+            GameObject portal = Instantiate(prefab_Portal, new Vector3(selectedPosition.x, selectedPosition.y, -0.1f), Quaternion.identity);
             Debug.Log($"Portal spawned at {selectedPosition}");
 
             SummonPlayer(selectedPosition);
