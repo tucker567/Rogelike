@@ -12,7 +12,6 @@ public class PerlinNoisMap : MonoBehaviour
     public GameObject prefab_light_stone; // The wall of the map, where player can't go
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
-    public GameObject prefab_Player;
     public GameObject prefab_Vines;
     public GameObject prefab_Enemy;
     public GameObject prefab_Portal;
@@ -55,6 +54,10 @@ public class PerlinNoisMap : MonoBehaviour
     
     // Public variable to adjust weighted spawn chance decay for grass variants.
     public float spawnDecay = 0.5f; 
+
+    [Header("Character Settings")]
+    public List<CharacterDefinition> allCharacters;     // ← new
+
 
     void Start()
     {
@@ -350,18 +353,35 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-    void SummonPlayer(Vector3Int chosenPosition)
-    {
-        GameObject player = Instantiate(prefab_Player, transform);
-        player.transform.position = new Vector3(chosenPosition.x, chosenPosition.y + 0.2f, 0);
+// put this at class scope (same level as PlacePortal)
+void SummonPlayer(Vector3Int portalPos)
+{
+    /* 1) which character? */
+    int idx = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
+    if (idx < 0 || idx >= allCharacters.Count) idx = 0;
 
-        SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
-        if (playerRenderer != null)
-        {
-            playerRenderer.sortingLayerName = "Player"; // Set to the layer you defined
-            playerRenderer.sortingOrder = 1; // A higher number to ensure it's drawn on top
-        }
+    /* 2) definition */
+    CharacterDefinition def = allCharacters[idx];
+
+    /* 3) spawn prefab */
+    GameObject player = Instantiate(def.characterPrefab, transform);
+    player.transform.position = new Vector3(portalPos.x, portalPos.y + 0.1f, 0f);
+
+    /* 4) apply base stats (optional) */
+    var stats = player.GetComponent<PlayerStatsEffects>();
+    if (stats != null)
+    {
+        stats.moveSpeed  = def.baseMoveSpeed;
+        stats.jumpHeight = def.baseJumpHeight;
+        stats.ResetStatsToBase();
     }
+
+    /* 5) sorting layer tweak */
+    var sr = player.GetComponent<SpriteRenderer>();
+    if (sr) { sr.sortingLayerName = "Player"; sr.sortingOrder = 1; }
+}
+
+
 
     public class Droplet
     {

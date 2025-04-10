@@ -1,9 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
+using TMPro;
 
 public class PlayerStatsEffects : MonoBehaviour
 {
     public static PlayerStatsEffects Instance;
 
+    [Header("All possible characters")]
+    public List<CharacterDefinition> allCharacters;
+    
     [Header("Base Simple Movement Stats")]
     public float moveSpeed = 5f;
     public float jumpHeight = 10f;
@@ -34,8 +39,25 @@ public class PlayerStatsEffects : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
+        // Grab the chosen index from PlayerPrefs
+        int selectedIndex = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
+        if (selectedIndex < 0 || selectedIndex >= allCharacters.Count)
+            selectedIndex = 0;
+
+        // Fetch that definition
+        CharacterDefinition def = allCharacters[selectedIndex];
+
+        // Set our stats
+        moveSpeed  = def.baseMoveSpeed;
+        jumpHeight = def.baseJumpHeight;
+        wallJumpingPower = def.baseWallJumpingPower;
+        maxWallJumps = def.baseMaxWallJumps; // Set the base max wall jumps
+        gravityScale = def.baseGravityScale; // Set the base gravity scale
+        
+
+        // If you do some "final stats" logic:
         ResetStatsToBase();
     }
 
