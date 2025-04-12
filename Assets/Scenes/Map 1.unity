@@ -5859,7 +5859,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8.857142
+  orthographic size: 5.8142858
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -6157,7 +6157,9 @@ MonoBehaviour:
   - {fileID: 190557831451757393, guid: a9ab848fce0ff184ab4419c6addc3ed4, type: 3}
   - {fileID: 2067993645046636534, guid: 2aa513c1e8a2bc042b0f9ccbc346bfef, type: 3}
   - {fileID: 2531130273512054815, guid: e80d67fa38b9fba439afee346191ae61, type: 3}
-  enemyCount: 5
+  enemyCount: 10
+  minEnemyScale: 0.75
+  maxEnemyScale: 1
   lightStoneTilemap: {fileID: 265719914}
   vinesToLightStoneRatio: 0.08
   minVineLength: 2
