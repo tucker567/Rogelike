@@ -20,6 +20,8 @@ public class PerlinNoisMap : MonoBehaviour
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
     public int enemyCount = 5;
+    public float minEnemyScale = 0.75f;
+    public float maxEnemyScale = 1.0f;
 
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
@@ -289,69 +291,76 @@ public class PerlinNoisMap : MonoBehaviour
         }
     }
 
-    void SummonEnemy()
-    {
-        List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
+void SummonEnemy()
+{
+    List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
-        // Find all gray stone tiles by tile ID (assuming 0 is dark/gray stone).
-        foreach (var entry in tile_Grid)
+    // Find all gray stone tiles by tile ID (assuming 0 is dark/gray stone).
+    foreach (var entry in tile_Grid)
+    {
+        TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
+        if (tileProperties != null && tileProperties.tileID == 0)
         {
-            TileProperties tileProperties = entry.Value.GetComponent<TileProperties>();
-            if (tileProperties != null && tileProperties.tileID == 0)
-            {
-                grayStoneTiles.Add(entry);
-            }
+            grayStoneTiles.Add(entry);
+        }
+    }
+
+    if (grayStoneTiles.Count == 0)
+    {
+        Debug.LogWarning("No gray stone tiles found.");
+        return;
+    }
+
+    Debug.Log($"Number of gray stone tiles found: {grayStoneTiles.Count}");
+
+    int spawnedEnemies = 0;
+    int attempts = 0;
+    int maxAttempts = enemyCount * 10; // Prevent potential infinite loops
+
+    while (spawnedEnemies < enemyCount && attempts < maxAttempts)
+    {
+        attempts++;
+        KeyValuePair<(int, int), GameObject> randomTile = grayStoneTiles[Random.Range(0, grayStoneTiles.Count)];
+        (int x, int y) = randomTile.Key;
+
+        // Ensure no light stone tile is present above.
+        if (lightStoneTilemap.HasTile(new Vector3Int(x, y + 1, 0)))
+        {
+            continue;
         }
 
-        if (grayStoneTiles.Count == 0)
+        int enemyY = y + 1; // Spawn enemy above the gray stone tile
+
+        // Check again if a light stone tile is present at the enemy spawn position.
+        if (lightStoneTilemap.HasTile(new Vector3Int(x, enemyY, 0)))
         {
-            Debug.LogWarning("No gray stone tiles found.");
+            continue;
+        }
+
+        if (prefab_Enemy == null)
+        {
+            Debug.LogWarning("Enemy prefab is not assigned in the inspector.");
             return;
         }
 
-        Debug.Log($"Number of gray stone tiles found: {grayStoneTiles.Count}");
+        // Instantiate the enemy
+        GameObject enemy = Instantiate(prefab_Enemy, new Vector3(x, enemyY, -0.01f), Quaternion.identity);
+        enemy.name = $"Enemy_x{x}_y{enemyY}";
+        tile_Grid[(x, enemyY)] = enemy;
 
-        int spawnedEnemies = 0;
-        int attempts = 0;
-        int maxAttempts = enemyCount * 10; // Prevent potential infinite loops
+        // Generate a random scale factor between the defined min and max scales.
+        float randomScaleFactor = Random.Range(minEnemyScale, maxEnemyScale);
+        // Apply the random uniform scale.
+        enemy.transform.localScale = new Vector3(randomScaleFactor, randomScaleFactor, enemy.transform.localScale.z);
 
-        while (spawnedEnemies < enemyCount && attempts < maxAttempts)
-        {
-            attempts++;
-            KeyValuePair<(int, int), GameObject> randomTile = grayStoneTiles[Random.Range(0, grayStoneTiles.Count)];
-            (int x, int y) = randomTile.Key;
-
-            // Ensure no light stone tile is present above.
-            if (lightStoneTilemap.HasTile(new Vector3Int(x, y + 1, 0)))
-            {
-                continue;
-            }
-
-            int enemyY = y + 1; // Spawn enemy above the gray stone tile
-
-            // Check again if a light stone tile is present at the enemy spawn position.
-            if (lightStoneTilemap.HasTile(new Vector3Int(x, enemyY, 0)))
-            {
-                continue;
-            }
-
-            if (prefab_Enemy == null)
-            {
-                Debug.LogWarning("Enemy prefab is not assigned in the inspector.");
-                return;
-            }
-
-            GameObject enemy = Instantiate(prefab_Enemy, new Vector3(x, enemyY, -0.01f), Quaternion.identity);
-            enemy.name = $"Enemy_x{x}_y{enemyY}";
-            tile_Grid[(x, enemyY)] = enemy;
-            spawnedEnemies++;
-        }
-
-        if (spawnedEnemies < enemyCount)
-        {
-            Debug.LogWarning($"Only spawned {spawnedEnemies} out of the requested {enemyCount} enemies.");
-        }
+        spawnedEnemies++;
     }
+
+    if (spawnedEnemies < enemyCount)
+    {
+        Debug.LogWarning($"Only spawned {spawnedEnemies} out of the requested {enemyCount} enemies.");
+    }
+}
 
 // put this at class scope (same level as PlacePortal)
 void SummonPlayer(Vector3Int portalPos)
