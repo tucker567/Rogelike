@@ -20,4 +20,4 @@ MonoBehaviour:
   baseMaxWallJumps: 4
   baseGravityScale: 2
   description: Likes Magic
-  portrait: {fileID: -5902858166360702760, guid: 6ab3b72aaaaaf594aa5295fe06bedb7f, type: 3}
+  portrait: {fileID: -7749075694655653220, guid: 268b515fb13a1dc478406a72d7f99eff, type: 3}
