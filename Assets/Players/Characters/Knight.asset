@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1986e860edc036c4f8432daee6e313a7, type: 3}
-  m_Name: Mage
+  m_Name: Knight
   m_EditorClassIdentifier: 
-  characterName: Mage
-  characterPrefab: {fileID: 6608987066490057576, guid: 8df8c7c7ef8197740af0967654388a70, type: 3}
-  baseMoveSpeed: 5
+  characterName: Knight
+  characterPrefab: {fileID: 6608987066490057576, guid: 32bae0d58ac65044f8512f6d305546d8, type: 3}
+  baseMoveSpeed: 4
   baseJumpHeight: 10
   baseWallJumpingPower: {x: 4, y: 8}
   baseMaxWallJumps: 4
-  baseGravityScale: 2
-  description: Likes Magic
-  portrait: {fileID: -7749075694655653220, guid: 268b515fb13a1dc478406a72d7f99eff, type: 3}
+  baseGravityScale: 2.2
+  baseMaxHealth: 110
+  description: A Knight
+  portrait: {fileID: -2002237673089193869, guid: 6ab3b72aaaaaf594aa5295fe06bedb7f, type: 3}

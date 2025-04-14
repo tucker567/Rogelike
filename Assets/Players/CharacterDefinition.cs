@@ -11,6 +11,7 @@ public class CharacterDefinition : ScriptableObject
     public Vector2 baseWallJumpingPower = new Vector2(4f, 8f);
     public float baseMaxWallJumps = 4f; // Maximum number of wall jumps
     public float baseGravityScale = 2f; // Gravity scale for the player
+    public int baseMaxHealth = 100;
 
 
     [TextArea] public string description;
