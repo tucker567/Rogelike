@@ -27,8 +27,6 @@ public class Inventory : MonoBehaviour
                 renderer.sprite = item.icon; // Set the icon to match the item
             }
         }
-        
-        PlayerStatsEffects.Instance.InvokeOnStatsReset(); // Call the new method
 
     }
 

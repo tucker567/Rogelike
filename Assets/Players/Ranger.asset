@@ -19,6 +19,5 @@ MonoBehaviour:
   baseWallJumpingPower: {x: 5, y: 10}
   baseMaxWallJumps: 5
   baseGravityScale: 1.7
-  baseMaxHealth: 85
   description: I like the color
   portrait: {fileID: 2860615876056779563, guid: 6ab3b72aaaaaf594aa5295fe06bedb7f, type: 3}

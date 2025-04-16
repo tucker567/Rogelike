@@ -5025,7 +5025,6 @@ GameObject:
   - component: {fileID: -2488908512039712663}
   - component: {fileID: 9079424765549926971}
   - component: {fileID: 822115317275126155}
-  - component: {fileID: 3377196156465888068}
   m_Layer: 3
   m_Name: character_1 - Ranger 2
   m_TagString: Player
@@ -5263,17 +5262,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LaunchForce: 5
   arrowPrefab: {fileID: 6094956191507937476, guid: 635af8f2d1224804ba47d61af8a6ea87, type: 3}
---- !u!114 &3377196156465888068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6608987066490057576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a79ec4be0396954584f71331f7a56c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 80
-  iFrameTime: 0.2
