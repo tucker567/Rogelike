@@ -443,6 +443,10 @@ void PlaceGrassOnSurface()
             Vector3Int currentPos = new Vector3Int(x, y, 0);
             Vector3Int abovePos = new Vector3Int(x, y + 1, 0);
 
+            if (y >= (mapHeight / 2) - 1)
+            continue;
+
+
             // Must be a tile visually
             if (!lightStoneTilemap.HasTile(currentPos))
                 continue;
