@@ -58,7 +58,15 @@ public class PerlinNoisMap : MonoBehaviour
     public float spawnDecay = 0.5f; 
 
     [Header("Character Settings")]
-    public List<CharacterDefinition> allCharacters;     // ← new
+    public List<CharacterDefinition> allCharacters;     
+
+readonly List<Vector2Int> directions = new List<Vector2Int>
+{
+    Vector2Int.up,
+    Vector2Int.down,
+    Vector2Int.left,
+    Vector2Int.right
+};
 
 
     void Start()
@@ -77,6 +85,11 @@ public class PerlinNoisMap : MonoBehaviour
         CreateTileset();
         CreateTileGroups();
         GenerateMap();
+
+    List<HashSet<Vector2Int>> cavernRegions = IdentifyDisconnectedCaverns();
+    Debug.Log($"Connecting {cavernRegions.Count} disconnected cavern regions...");
+    ConnectDisconnectedCaverns(cavernRegions);
+
         SimulateErosion();
         PlaceGrassOnSurface();
         PlaceCamerasOnBottom();
@@ -554,6 +567,7 @@ void SummonPlayer(Vector3Int portalPos)
         }
     }
 
+
     void PlaceCamerasOnBottom()
     {
         GameObject cameraParent = new GameObject("Cameras");
@@ -591,6 +605,181 @@ void SummonPlayer(Vector3Int portalPos)
         }
         Debug.Log("Cameras placement complete!");
     }
+
+   public bool IsWalkable(Vector2Int pos)
+{
+    if (tile_Grid.TryGetValue((pos.x, pos.y), out GameObject tile))
+    {
+        TileProperties tp = tile.GetComponent<TileProperties>();
+        return tp != null && tp.tileID == 1;
+    }
+
+    return lightStoneTilemap.HasTile(new Vector3Int(pos.x, pos.y, 0));
+}
+
+
+public bool IsDiggableBounded(Vector2Int pos, Vector2Int from, Vector2Int to)
+{
+    int buffer = 10;
+
+    int minX = Mathf.Min(from.x, to.x) - buffer;
+    int maxX = Mathf.Max(from.x, to.x) + buffer;
+    int minY = Mathf.Min(from.y, to.y) - buffer;
+    int maxY = Mathf.Max(from.y, to.y) + buffer;
+
+    if (pos.x < minX || pos.x > maxX || pos.y < minY || pos.y > maxY)
+        return false;
+
+    return true;
+}
+
+
+
+List<HashSet<Vector2Int>> IdentifyDisconnectedCaverns()
+{
+    HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+    List<HashSet<Vector2Int>> regions = new List<HashSet<Vector2Int>>();
+
+    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+    {
+        for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+        {
+            Vector2Int pos = new Vector2Int(x, y);
+            if (visited.Contains(pos)) continue;
+
+            if (!IsWalkable(pos)) continue;
+
+            HashSet<Vector2Int> region = new HashSet<Vector2Int>();
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+            queue.Enqueue(pos);
+            visited.Add(pos);
+
+            while (queue.Count > 0)
+            {
+                Vector2Int current = queue.Dequeue();
+                region.Add(current);
+
+                foreach (Vector2Int dir in directions)
+                {
+                    Vector2Int neighbor = current + dir;
+
+                    // Clamp to map bounds
+                    if (neighbor.x < -mapWidth / 2 || neighbor.x >= mapWidth / 2 ||
+                        neighbor.y < -mapHeight / 2 || neighbor.y >= mapHeight / 2)
+                        continue;
+
+                    if (!visited.Contains(neighbor) && IsWalkable(neighbor))
+                    {
+                        visited.Add(neighbor);
+                        queue.Enqueue(neighbor);
+                    }
+                }
+            }
+
+            regions.Add(region);
+        }
+    }
+
+    return regions;
+}
+
+
+void GreedyTunnel(Vector2Int from, Vector2Int to)
+{
+    Vector2Int current = from;
+
+    while (current != to)
+    {
+        if (current.x != to.x)
+            current.x += (to.x > current.x) ? 1 : -1;
+        else if (current.y != to.y)
+            current.y += (to.y > current.y) ? 1 : -1;
+
+        Vector3Int tilePos = new Vector3Int(current.x, current.y, 0);
+
+        if (!lightStoneTilemap.HasTile(tilePos))
+        {
+            lightStoneTilemap.SetTile(tilePos, ruletile);
+
+            GameObject tile = new GameObject($"DugTile_{current.x}_{current.y}");
+            tile.transform.position = new Vector3(current.x, current.y, 0);
+            tile.transform.parent = transform;
+
+            TileProperties tp = tile.AddComponent<TileProperties>();
+            tp.tileID = 1;
+            tile_Grid[(current.x, current.y)] = tile;
+        }
+    }
+}
+
+
+void ConnectDisconnectedCaverns(List<HashSet<Vector2Int>> regions)
+{
+    if (regions.Count <= 1) return;
+
+    var mainRegion = regions[0];
+
+    for (int i = 1; i < regions.Count; i++)
+    {
+        Vector2Int closestMain = Vector2Int.zero;
+        Vector2Int closestOther = Vector2Int.zero;
+        float minDist = float.MaxValue;
+
+        foreach (var pos1 in mainRegion)
+        {
+            foreach (var pos2 in regions[i])
+            {
+                float dist = Vector2Int.Distance(pos1, pos2);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closestMain = pos1;
+                    closestOther = pos2;
+                }
+            }
+        }
+
+        DigTunnelWithAStar(closestMain, closestOther);
+        mainRegion.UnionWith(regions[i]);
+    }
+}
+
+void DigTunnelWithAStar(Vector2Int from, Vector2Int to)
+{
+    var path = AStarPathfinder.Instance.FindPath(from, to, pos => IsDiggableBounded(pos, from, to));
+  
+
+    if (path == null || path.Count == 0)
+    {
+        Debug.LogWarning($"A* failed from {from} to {to}. Falling back to greedy tunnel.");
+        GreedyTunnel(from, to);
+        return;
+    }
+
+    foreach (Vector2Int step in path)
+    {
+        Vector3Int pos = new Vector3Int(step.x, step.y, 0);
+
+        if (!lightStoneTilemap.HasTile(pos))
+        {
+            lightStoneTilemap.SetTile(pos, ruletile);
+
+            GameObject tile = new GameObject($"DugTile_{step.x}_{step.y}");
+            tile.transform.position = new Vector3(step.x, step.y, 0);
+            tile.transform.parent = transform;
+
+            TileProperties tp = tile.AddComponent<TileProperties>();
+            tp.tileID = 1;
+            tile_Grid[(step.x, step.y)] = tile;
+            
+
+        }
+    }
+}
+
+
+
+
 
     void CreateBarrier()
     {
