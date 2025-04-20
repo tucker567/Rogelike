@@ -425,86 +425,77 @@ void SummonPlayer(Vector3Int portalPos)
         public float height = 0.1f;
     }
 
-    void PlaceGrassOnSurface()
+void PlaceGrassOnSurface()
+{
+    if (grassVariants == null || grassVariants.Count == 0)
     {
-        if (grassVariants == null || grassVariants.Count == 0)
-        {
-            Debug.LogWarning("No grass variants assigned. Assign prefabs in the Inspector.");
-            return;
-        }
-
-        Dictionary<int, List<int>> columnYValues = new Dictionary<int, List<int>>();
-
-        // Scan the entire map width and height.
-        for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
-        {
-            for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
-            {
-                if (lightStoneTilemap.HasTile(new Vector3Int(x, y, 0))) // Light stone tile detected.
-                {
-                    if (!columnYValues.ContainsKey(x))
-                        columnYValues[x] = new List<int>();
-
-                    columnYValues[x].Add(y);
-                }
-            }
-        }
-
-        if (columnYValues.Count == 0)
-        {
-            Debug.LogWarning("No light stone tiles detected on the tilemap.");
-            return;
-        }
-
-        GameObject grassParent = new GameObject("GrassTiles");
-        grassParent.transform.parent = transform;
-
-        foreach (var entry in columnYValues)
-        {
-            int x = entry.Key;
-            List<int> yValues = entry.Value;
-            yValues.Sort();
-
-            for (int i = 1; i < yValues.Count; i++) 
-            {
-                int prevY = yValues[i - 1];
-                int currentY = yValues[i];
-
-                if (currentY - prevY > 1)
-                {
-                    int grassY = prevY + 1; 
-
-                    // Use weighted spawn chance for selecting a grass variant.
-                    float totalWeight = 0f;
-                    for (int j = 0; j < grassVariants.Count; j++)
-                    {
-                        totalWeight += Mathf.Pow(spawnDecay, j);
-                    }
-
-                    float randomValue = Random.Range(0f, totalWeight);
-                    GameObject selectedGrass = grassVariants[grassVariants.Count - 1]; // Default to the last element.
-
-                    for (int j = 0; j < grassVariants.Count; j++)
-                    {
-                        float weight = Mathf.Pow(spawnDecay, j);
-                        if (randomValue < weight)
-                        {
-                            selectedGrass = grassVariants[j];
-                            break;
-                        }
-                        randomValue -= weight;
-                    }
-
-                    Vector3 grassPosition = new Vector3(x, grassY, -0.01f);
-                    GameObject grass = Instantiate(selectedGrass, grassPosition, Quaternion.identity);
-                    grass.transform.parent = grassParent.transform;
-                    grass.name = $"Grass_x{x}_y{grassY}";
-                }
-            }
-        }
-
-        Debug.Log("Grass placement complete!");
+        Debug.LogWarning("No grass variants assigned.");
+        return;
     }
+
+    GameObject grassParent = new GameObject("GrassTiles");
+    grassParent.transform.parent = transform;
+
+    for (int x = -mapWidth / 2; x < mapWidth / 2; x++)
+    {
+        for (int y = -mapHeight / 2; y < mapHeight / 2; y++)
+        {
+            Vector3Int currentPos = new Vector3Int(x, y, 0);
+            Vector3Int abovePos = new Vector3Int(x, y + 1, 0);
+
+            // Must be a tile visually
+            if (!lightStoneTilemap.HasTile(currentPos))
+                continue;
+
+            // No tile directly above
+            if (lightStoneTilemap.HasTile(abovePos))
+                continue;
+
+            bool isWalkable = false;
+
+            if (tile_Grid.TryGetValue((x, y), out GameObject tileObj))
+            {
+                var tp = tileObj.GetComponent<TileProperties>();
+                if (tp != null && tp.tileID == 1)
+                    isWalkable = true;
+            }
+
+            // Skip if walkable (dug out tile)
+            if (isWalkable)
+                continue;
+
+
+            // Weighted variant selection
+            float totalWeight = 0f;
+            for (int j = 0; j < grassVariants.Count; j++)
+                totalWeight += Mathf.Pow(spawnDecay, j);
+
+            float r = Random.Range(0f, totalWeight);
+            GameObject selectedGrass = grassVariants[^1];
+
+            for (int j = 0; j < grassVariants.Count; j++)
+            {
+                float weight = Mathf.Pow(spawnDecay, j);
+                if (r < weight)
+                {
+                    selectedGrass = grassVariants[j];
+                    break;
+                }
+                r -= weight;
+            }
+
+            Vector3 spawnPos = new Vector3(x, y + 1f, -0.01f);
+            GameObject grass = Instantiate(selectedGrass, spawnPos, Quaternion.identity);
+            grass.transform.parent = grassParent.transform;
+            grass.name = $"Grass_{x}_{y + 1}";
+        }
+    }
+
+    Debug.Log("Grass placement complete.");
+}
+
+
+
 
     void PlaceVinesOnRandomGrayStone()
     {
@@ -695,22 +686,22 @@ void GreedyTunnel(Vector2Int from, Vector2Int to)
         else if (current.y != to.y)
             current.y += (to.y > current.y) ? 1 : -1;
 
-        Vector3Int tilePos = new Vector3Int(current.x, current.y, 0);
+        Vector3Int pos = new Vector3Int(current.x, current.y, 0);
 
-        if (!lightStoneTilemap.HasTile(tilePos))
-        {
-            lightStoneTilemap.SetTile(tilePos, ruletile);
+        //  Force RuleTile update and collider refresh
+        lightStoneTilemap.SetTile(pos, ruletile);
 
-            GameObject tile = new GameObject($"DugTile_{current.x}_{current.y}");
-            tile.transform.position = new Vector3(current.x, current.y, 0);
-            tile.transform.parent = transform;
+        //  Update tile grid and metadata (no need to check if already exists)
+        GameObject tile = new GameObject($"DugTile_{current.x}_{current.y}");
+        tile.transform.position = new Vector3(current.x, current.y, 0);
+        tile.transform.parent = transform;
 
-            TileProperties tp = tile.AddComponent<TileProperties>();
-            tp.tileID = 1;
-            tile_Grid[(current.x, current.y)] = tile;
-        }
+        TileProperties tp = tile.AddComponent<TileProperties>();
+        tp.tileID = 1;
+        tile_Grid[(current.x, current.y)] = tile;
     }
 }
+
 
 
 void ConnectDisconnectedCaverns(List<HashSet<Vector2Int>> regions)
@@ -747,7 +738,6 @@ void ConnectDisconnectedCaverns(List<HashSet<Vector2Int>> regions)
 void DigTunnelWithAStar(Vector2Int from, Vector2Int to)
 {
     var path = AStarPathfinder.Instance.FindPath(from, to, pos => IsDiggableBounded(pos, from, to));
-  
 
     if (path == null || path.Count == 0)
     {
@@ -757,27 +747,29 @@ void DigTunnelWithAStar(Vector2Int from, Vector2Int to)
     }
 
     foreach (Vector2Int step in path)
-    {
-        Vector3Int pos = new Vector3Int(step.x, step.y, 0);
+{
+    Vector3Int pos = new Vector3Int(step.x, step.y, 0);
 
-        if (!lightStoneTilemap.HasTile(pos))
-        {
-            lightStoneTilemap.SetTile(pos, ruletile);
+    lightStoneTilemap.SetTile(pos, ruletile);
 
-            GameObject tile = new GameObject($"DugTile_{step.x}_{step.y}");
-            tile.transform.position = new Vector3(step.x, step.y, 0);
-            tile.transform.parent = transform;
-
-            TileProperties tp = tile.AddComponent<TileProperties>();
-            tp.tileID = 1;
-            tile_Grid[(step.x, step.y)] = tile;
-            
-
-        }
-    }
+TilemapCollider2D collider = lightStoneTilemap.GetComponent<TilemapCollider2D>();
+if (collider != null)
+{
+    collider.enabled = false;
+    collider.enabled = true;
 }
 
 
+    GameObject tile = new GameObject($"DugTile_{step.x}_{step.y}");
+    tile.transform.position = new Vector3(step.x, step.y, 0);
+    tile.transform.parent = transform;
+
+    TileProperties tp = tile.AddComponent<TileProperties>();
+    tp.tileID = 1;
+    tile_Grid[(step.x, step.y)] = tile;
+}
+
+}
 
 
 
