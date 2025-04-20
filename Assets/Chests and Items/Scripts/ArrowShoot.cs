@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArrowShoot : MonoBehaviour
 {
-    public float LaunchForce;   // Fixed: added semicolon
+    public float LaunchForce;   
     public GameObject arrowPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,7 +16,7 @@ public class ArrowShoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))  // Fixed: use GetKeyDown with correct KeyCode
+        if (Input.GetKeyDown(KeyCode.E))  
         {
             ShootArrow();
         }

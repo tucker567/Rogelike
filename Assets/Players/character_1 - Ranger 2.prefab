@@ -5023,7 +5023,6 @@ GameObject:
   - component: {fileID: 5327266110587505415}
   - component: {fileID: 2421300736702548431}
   - component: {fileID: -2488908512039712663}
-  - component: {fileID: 9079424765549926971}
   - component: {fileID: 822115317275126155}
   m_Layer: 3
   m_Name: character_1 - Ranger 2
@@ -5235,19 +5234,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poppedItemPrefab: {fileID: 0}
---- !u!114 &9079424765549926971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6608987066490057576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2605a086b27b7f0459ee935ab44cdfbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: {x: 0, y: 0}
 --- !u!114 &822115317275126155
 MonoBehaviour:
   m_ObjectHideFlags: 0
