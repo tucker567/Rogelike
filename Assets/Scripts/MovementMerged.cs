@@ -2,6 +2,20 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+public enum MovementState
+{
+    Idle,
+    Running,
+    Jumping,
+    Falling,
+    WallSliding
+}
+private MovementState state;
+
+private Animator anim;
+
+
     public ParticleSystem Dust;
 
     // Movement parameters
@@ -33,6 +47,13 @@ public class PlayerMovement : MonoBehaviour
     private int wallJumpCount = 0;
     private float maxWallJumps => PlayerStatsEffects.Instance.finalMaxWallJumps; // Maximum number of wall jumps
 
+
+    private void Start()
+    {
+     anim = GetComponent<Animator>();
+    if (anim == null)
+        Debug.LogWarning("Animator not found on player!");
+    }
     private void Update()
     {
         // Get horizontal input
@@ -64,6 +85,10 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply gravity scale
         rb.gravityScale = PlayerStatsEffects.Instance.finnalGravityScale; // Use the final gravity scale from PlayerStatsEffects
+
+        UpdateState();
+        UpdateAnimation();
+
     }
 
     private void FixedUpdate()
@@ -160,4 +185,36 @@ public class PlayerMovement : MonoBehaviour
     {
         Dust.Play();
     }
+
+    void UpdateState()
+{
+    if (isWallSliding)
+    {
+        state = MovementState.WallSliding;
+    }
+    else if (!IsGrounded())
+    {
+        if (rb.linearVelocity.y > 0.1f)
+            state = MovementState.Jumping;
+        else
+            state = MovementState.Falling;
+    }
+    else if (Mathf.Abs(horizontal) > 0.1f)
+    {
+        state = MovementState.Running;
+    }
+    else
+    {
+        state = MovementState.Idle;
+    }
+}
+
+void UpdateAnimation()
+{
+    if (anim == null) return;
+
+    anim.SetInteger("movementState", (int)state);
+}
+
+    
 }

@@ -5024,6 +5024,7 @@ GameObject:
   - component: {fileID: 5327266110587505415}
   - component: {fileID: 2421300736702548431}
   - component: {fileID: -2488908512039712663}
+  - component: {fileID: -5834789920710640518}
   m_Layer: 3
   m_Name: character_2 - Mage
   m_TagString: Player
@@ -5248,6 +5249,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poppedItemPrefab: {fileID: 0}
+--- !u!95 &-5834789920710640518
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608987066490057576}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1098a701e3bf7214d9cbfed3b786e6c8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8160311267529431995
 GameObject:
   m_ObjectHideFlags: 0
