@@ -13,15 +13,15 @@ public class PerlinNoisMap : MonoBehaviour
     public RuleTile ruletile; // Using RuleTile for Dark stone
     public GameObject prefab_Wall_test;
     public GameObject prefab_Vines;
-    public GameObject prefab_Enemy;
+    public GameObject prefab_FlyEnemy;
     public GameObject prefab_Portal;
     public List<GameObject> prefab_Cameras = new List<GameObject>();
     public int chancetospawncamera = 10;
     public List<GameObject> grassVariants = new List<GameObject>(); // List of grass prefabs
 
-    public int enemyCount = 5;
-    public float minEnemyScale = 0.75f;
-    public float maxEnemyScale = 1.0f;
+    public int FlyEnemyCount = 5;
+    public float minFlyEnemyScale = 0.75f;
+    public float maxFlyEnemyScale = 1.0f;
 
     // Tilemap for the light stone RuleTile.
     public Tilemap lightStoneTilemap;
@@ -96,7 +96,8 @@ readonly List<Vector2Int> directions = new List<Vector2Int>
         PlaceVinesOnRandomGrayStone();
         CreateBarrier();
         PlacePortal();
-        SummonEnemy();
+        SummonFlyEnemy();
+        GetComponent<EnemySpawnHelper>().SpawnGroundEnemies();
 
         Debug.Log("Map generation complete.");
     }
@@ -304,7 +305,7 @@ readonly List<Vector2Int> directions = new List<Vector2Int>
         }
     }
 
-void SummonEnemy()
+void SummonFlyEnemy()
 {
     List<KeyValuePair<(int, int), GameObject>> grayStoneTiles = new List<KeyValuePair<(int, int), GameObject>>();
 
@@ -328,9 +329,9 @@ void SummonEnemy()
 
     int spawnedEnemies = 0;
     int attempts = 0;
-    int maxAttempts = enemyCount * 10; // Prevent potential infinite loops
+    int maxAttempts = FlyEnemyCount * 10; // Prevent potential infinite loops
 
-    while (spawnedEnemies < enemyCount && attempts < maxAttempts)
+    while (spawnedEnemies < FlyEnemyCount && attempts < maxAttempts)
     {
         attempts++;
         KeyValuePair<(int, int), GameObject> randomTile = grayStoneTiles[Random.Range(0, grayStoneTiles.Count)];
@@ -342,36 +343,36 @@ void SummonEnemy()
             continue;
         }
 
-        int enemyY = y + 1; // Spawn enemy above the gray stone tile
+        int FlyEnemyY = y + 1; // Spawn enemy above the gray stone tile
 
         // Check again if a light stone tile is present at the enemy spawn position.
-        if (lightStoneTilemap.HasTile(new Vector3Int(x, enemyY, 0)))
+        if (lightStoneTilemap.HasTile(new Vector3Int(x, FlyEnemyY, 0)))
         {
             continue;
         }
 
-        if (prefab_Enemy == null)
+        if (prefab_FlyEnemy == null)
         {
-            Debug.LogWarning("Enemy prefab is not assigned in the inspector.");
+            Debug.LogWarning("FlyEnemy prefab is not assigned in the inspector.");
             return;
         }
 
         // Instantiate the enemy
-        GameObject enemy = Instantiate(prefab_Enemy, new Vector3(x, enemyY, -0.01f), Quaternion.identity);
-        enemy.name = $"Enemy_x{x}_y{enemyY}";
-        tile_Grid[(x, enemyY)] = enemy;
+        GameObject flyEnemy = Instantiate(prefab_FlyEnemy, new Vector3(x, FlyEnemyY, -0.01f), Quaternion.identity);
+        flyEnemy.name = $"Enemy_x{x}_y{FlyEnemyY}";
+        tile_Grid[(x, FlyEnemyY)] = flyEnemy;
 
         // Generate a random scale factor between the defined min and max scales.
-        float randomScaleFactor = Random.Range(minEnemyScale, maxEnemyScale);
+        float randomScaleFactor = Random.Range(minFlyEnemyScale, maxFlyEnemyScale);
         // Apply the random uniform scale.
-        enemy.transform.localScale = new Vector3(randomScaleFactor, randomScaleFactor, enemy.transform.localScale.z);
+        flyEnemy.transform.localScale = new Vector3(randomScaleFactor, randomScaleFactor, flyEnemy.transform.localScale.z);
 
         spawnedEnemies++;
     }
 
-    if (spawnedEnemies < enemyCount)
+    if (spawnedEnemies < FlyEnemyCount)
     {
-        Debug.LogWarning($"Only spawned {spawnedEnemies} out of the requested {enemyCount} enemies.");
+        Debug.LogWarning($"Only spawned {spawnedEnemies} out of the requested {FlyEnemyCount} enemies.");
     }
 }
 
@@ -705,8 +706,6 @@ void GreedyTunnel(Vector2Int from, Vector2Int to)
         tile_Grid[(current.x, current.y)] = tile;
     }
 }
-
-
 
 void ConnectDisconnectedCaverns(List<HashSet<Vector2Int>> regions)
 {
