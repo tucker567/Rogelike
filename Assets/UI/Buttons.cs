@@ -15,4 +15,13 @@ public class Buttons : MonoBehaviour
         Debug.Log("Game is exiting");
     }
 
+    void packatles()
+    {
+        Debug.Log("Packatles");
+    }
+
+    public void LoadGameScene()
+    {
+        LevelLoader.Load("Map 1"); // or whatever your actual scene name is
+    }
 }
