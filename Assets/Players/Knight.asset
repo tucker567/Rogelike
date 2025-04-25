@@ -19,5 +19,6 @@ MonoBehaviour:
   baseWallJumpingPower: {x: 4, y: 8}
   baseMaxWallJumps: 4
   baseGravityScale: 2.2
+  baseHealth: 110
   description: A Knight
   portrait: {fileID: -2002237673089193869, guid: 6ab3b72aaaaaf594aa5295fe06bedb7f, type: 3}

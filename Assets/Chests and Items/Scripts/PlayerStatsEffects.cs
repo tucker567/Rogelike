@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class PlayerStatsEffects : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class PlayerStatsEffects : MonoBehaviour
     [Header("Gravity Settings")]
     public float gravityScale = 2f; // Gravity scale for the player
     public float finnalGravityScale ; // Final gravity scale after item effects
+
+    [Header("Health")]
+    public int maxHealth = 100; // Maximum health of the player
+    public int finalHealth; // Final health after item effects
+
+    public event Action OnStatsReset;
 
     [Header("Final Simple Movement Stats ")]
     public float finalMoveSpeed;
@@ -55,6 +62,8 @@ public class PlayerStatsEffects : MonoBehaviour
         wallJumpingPower = def.baseWallJumpingPower;
         maxWallJumps = def.baseMaxWallJumps; // Set the base max wall jumps
         gravityScale = def.baseGravityScale; // Set the base gravity scale
+        maxHealth = (int)def.baseHealth; // Explicitly cast baseHealth to int 
+
         
 
         // If you do some "final stats" logic:
@@ -68,6 +77,8 @@ public class PlayerStatsEffects : MonoBehaviour
         finalWallJumpingPower = wallJumpingPower;
         finalMaxWallJumps = maxWallJumps; // Reset to base value
         finnalGravityScale = gravityScale; // Reset to base value
+        finalHealth = maxHealth; // Reset to base value
+        OnStatsReset?.Invoke(); // Notify listeners that stats have been reset
     }
 
     public void ApplyJumpBoost(float multiplier)
