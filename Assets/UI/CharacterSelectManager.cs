@@ -15,6 +15,10 @@ public class CharacterSelectManager : MonoBehaviour
     public Image portraitDisplay;                    // portrait Image
     public TMP_Text nameText;                        // TextMeshPro for name
     public TMP_Text descriptionText;                 // TextMeshPro for description
+    public Image leftWeaponImage;                  // Image for left weapon
+    public TMP_Text leftWeaponDescription;           // TextMeshPro for left weapon description
+    public Image rightWeaponImage;                 // Image for right weapon
+    public TMP_Text rightWeaponDescription;          // TextMeshPro for right weapon description
 
     /* ---------- Private state ---------- */
 
@@ -69,6 +73,10 @@ public class CharacterSelectManager : MonoBehaviour
         portraitDisplay.sprite   = d.portrait;
         nameText.text            = d.characterName;
         descriptionText.text     = d.description;
+        leftWeaponImage.sprite   = d.leftWeaponSprite;
+        leftWeaponDescription.text = d.leftWeaponDescription;
+        rightWeaponImage.sprite  = d.rightWeaponSprite;
+        rightWeaponDescription.text = d.rightWeaponDescription;
     }
 
     /* ---------- Optional: keyboard hot‑keys ---------- */
