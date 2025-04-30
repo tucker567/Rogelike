@@ -71,12 +71,31 @@ readonly List<Vector2Int> directions = new List<Vector2Int>
 
     void Start()
     {
+        // Ensure PerlinSettings.Instance is not null before accessing it.
+        if (MapSettings.Instance != null)
+        {
+            magnitude = MapSettings.Instance.magnitude;
+            frequency = MapSettings.Instance.frequency;
+            noiseThreshold = MapSettings.Instance.noiseThreshold;
+        }
+        else
+        {
+            Debug.LogWarning("PerlinSettings.Instance is not defined.");
+        }
+
+
         Debug.Log("Starting map generation...");
 
         // Generate a random seed if not provided.
-        if (seed == -1)
+        if (MapSettings.Instance != null)
+        {
+            seed = MapSettings.Instance.seed;
+        }
+        else
+        {
             seed = Random.Range(0, 10000);
-
+        }
+        // Set offsets based on the seed.
         x_offset = seed;
         y_offset = seed;
 
@@ -86,9 +105,9 @@ readonly List<Vector2Int> directions = new List<Vector2Int>
         CreateTileGroups();
         GenerateMap();
 
-    List<HashSet<Vector2Int>> cavernRegions = IdentifyDisconnectedCaverns();
-    Debug.Log($"Connecting {cavernRegions.Count} disconnected cavern regions...");
-    ConnectDisconnectedCaverns(cavernRegions);
+        List<HashSet<Vector2Int>> cavernRegions = IdentifyDisconnectedCaverns();
+        Debug.Log($"Connecting {cavernRegions.Count} disconnected cavern regions...");
+        ConnectDisconnectedCaverns(cavernRegions);
 
         SimulateErosion();
         PlaceGrassOnSurface();
@@ -100,6 +119,7 @@ readonly List<Vector2Int> directions = new List<Vector2Int>
         GetComponent<EnemySpawnHelper>().SpawnGroundEnemies();
 
         Debug.Log("Map generation complete.");
+
     }
 
     void CreateTileset()

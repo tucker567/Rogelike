@@ -1045,8 +1045,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1063,7 +1063,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 28.15
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1131,8 +1131,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.8126068, y: -0.000015259}
-  m_SizeDelta: {x: -259.9484, y: -19.5}
+  m_AnchoredPosition: {x: -5.622589, y: 5.2721024}
+  m_SizeDelta: {x: -267.5683, y: -85.155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &866735671
 GameObject:
@@ -6218,8 +6218,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -340, y: 265}
-  m_SizeDelta: {x: -720, y: -570}
+  m_AnchoredPosition: {x: -341.69617, y: 392.6797}
+  m_SizeDelta: {x: -723.3923, y: -825.3594}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1404469416
 MonoBehaviour:
@@ -6336,7 +6336,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.8142858
+  orthographic size: 6.7285714
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
