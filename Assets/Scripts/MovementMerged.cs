@@ -2,19 +2,17 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public enum MovementState
+    {
+        Idle,
+        Running,
+        Jumping,
+        Falling,
+        WallSliding
+    }
+    private MovementState state;
 
-public enum MovementState
-{
-    Idle,
-    Running,
-    Jumping,
-    Falling,
-    WallSliding
-}
-private MovementState state;
-
-private Animator anim;
-
+    private Animator anim;
 
     public ParticleSystem Dust;
 
@@ -23,6 +21,7 @@ private Animator anim;
     private float jumpHeight => PlayerStatsEffects.Instance.finalJumpHeight;
 
     private float horizontal;
+    private bool downPressed; // DOWNWARD CONTROL
     private bool isFacingRight = true;
 
     // Components
@@ -41,31 +40,28 @@ private Animator anim;
     [SerializeField] private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     [SerializeField] private float wallJumpingDuration = 0.4f;
-    private float wallJumpingPowerX => PlayerStatsEffects.Instance.finalWallJumpingPower.x; // Horizontal power
-    private float wallJumpingPowerY => PlayerStatsEffects.Instance.finalWallJumpingPower.y; // Vertical power
-    // Wall jump limit
+    private float wallJumpingPowerX => PlayerStatsEffects.Instance.finalWallJumpingPower.x;
+    private float wallJumpingPowerY => PlayerStatsEffects.Instance.finalWallJumpingPower.y;
     private int wallJumpCount = 0;
-    private float maxWallJumps => PlayerStatsEffects.Instance.finalMaxWallJumps; // Maximum number of wall jumps
-
+    private float maxWallJumps => PlayerStatsEffects.Instance.finalMaxWallJumps;
 
     private void Start()
     {
-     anim = GetComponent<Animator>();
-    if (anim == null)
-        Debug.LogWarning("Animator not found on player!");
+        anim = GetComponent<Animator>();
+        if (anim == null)
+            Debug.LogWarning("Animator not found on player!");
     }
+
     private void Update()
     {
-        // Get horizontal input
         horizontal = Input.GetAxisRaw("Horizontal");
+        downPressed = Input.GetKey(KeyCode.S); // DOWNWARD CONTROL
 
-        // Reset wall jump count if player touches the ground
         if (IsGrounded())
         {
             wallJumpCount = 0;
         }
 
-        // Jumping: if jump pressed and on the ground, then jump
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             Debug.Log("Jumping!");
@@ -73,35 +69,37 @@ private Animator anim;
             CreateDust();
         }
 
-        // Handle wall sliding and wall jumping
         if (wallCheck != null)
         {
             WallSlide();
             WallJump();
         }
 
-        // Flip the character based on horizontal input
         DirectionFlip();
 
-        // Apply gravity scale
-        rb.gravityScale = PlayerStatsEffects.Instance.finnalGravityScale; // Use the final gravity scale from PlayerStatsEffects
+        rb.gravityScale = PlayerStatsEffects.Instance.finnalGravityScale;
 
         UpdateState();
         UpdateAnimation();
-
     }
 
     private void FixedUpdate()
     {
         if (PlayerStatsEffects.Instance == null)
         {
-            Debug.LogError("PlayerStatsEffects.Instance is null. Ensure it is properly initialized in the scene."); // Added error log
-            return; // Prevent further execution
+            Debug.LogError("PlayerStatsEffects.Instance is null. Ensure it is properly initialized in the scene.");
+            return;
         }
 
         if (!isWallJumping)
         {
             rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
+
+            // DOWNWARD CONTROL: Accelerate down when S is held and not grounded
+            if (downPressed && !IsGrounded())
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y - 1f);
+            }
         }
     }
 
@@ -145,12 +143,11 @@ private Animator anim;
         if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && wallJumpCount < maxWallJumps)
         {
             isWallJumping = true;
-            float jumpX = wallJumpingPowerX; // Use the x component for horizontal velocity
-            float jumpY = wallJumpingPowerY; // Use the y component for vertical velocity
-            rb.linearVelocity = new Vector2(jumpX * wallJumpingDirection, jumpY); // Corrected from linearVelocity to velocity
+            float jumpX = wallJumpingPowerX;
+            float jumpY = wallJumpingPowerY;
+            rb.linearVelocity = new Vector2(jumpX * wallJumpingDirection, jumpY);
             wallJumpingCounter = 0f;
-            wallJumpCount++; // Increment the wall jump count
-
+            wallJumpCount++;
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
             CreateDust();
         }
@@ -187,34 +184,32 @@ private Animator anim;
     }
 
     void UpdateState()
-{
-    if (isWallSliding)
     {
-        state = MovementState.WallSliding;
-    }
-    else if (!IsGrounded())
-    {
-        if (rb.linearVelocity.y > 0.1f)
-            state = MovementState.Jumping;
+        if (isWallSliding)
+        {
+            state = MovementState.WallSliding;
+        }
+        else if (!IsGrounded())
+        {
+            if (rb.linearVelocity.y > 0.1f)
+                state = MovementState.Jumping;
+            else
+                state = MovementState.Falling;
+        }
+        else if (Mathf.Abs(horizontal) > 0.1f)
+        {
+            state = MovementState.Running;
+        }
         else
-            state = MovementState.Falling;
+        {
+            state = MovementState.Idle;
+        }
     }
-    else if (Mathf.Abs(horizontal) > 0.1f)
+
+    void UpdateAnimation()
     {
-        state = MovementState.Running;
+        if (anim == null) return;
+
+        anim.SetInteger("movementState", (int)state);
     }
-    else
-    {
-        state = MovementState.Idle;
-    }
-}
-
-void UpdateAnimation()
-{
-    if (anim == null) return;
-
-    anim.SetInteger("movementState", (int)state);
-}
-
-    
 }

@@ -18,7 +18,7 @@ public class DistanceCalculator : MonoBehaviour
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-            Debug.Log("Distance to target: " + distance);
+
             
 
             if (enemyObject == null)
@@ -38,7 +38,6 @@ public class DistanceCalculator : MonoBehaviour
                     if (enemyPathfinder.enabled)
                     {
                         enemyPathfinder.enabled = false;
-                        Debug.Log("Disabled the enemy's Pathfinder component.");
                     }
                 }
                 else
@@ -47,7 +46,6 @@ public class DistanceCalculator : MonoBehaviour
                     if (!enemyPathfinder.enabled)
                     {
                         enemyPathfinder.enabled = true;
-                        Debug.Log("Enabled the enemy's Pathfinder component.");
                     }
                 }
             }
