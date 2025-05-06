@@ -22,3 +22,7 @@ MonoBehaviour:
   baseHealth: 85
   description: I like the color
   portrait: {fileID: 2860615876056779563, guid: 6ab3b72aaaaaf594aa5295fe06bedb7f, type: 3}
+  leftWeaponSprite: {fileID: -8530189838618661132, guid: 5a71c6d5e1756d248b64092b3c67b09e, type: 3}
+  leftWeaponDescription: left ranger
+  rightWeaponSprite: {fileID: -8530189838618661132, guid: 5a71c6d5e1756d248b64092b3c67b09e, type: 3}
+  rightWeaponDescription: right ranger

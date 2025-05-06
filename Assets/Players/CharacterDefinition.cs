@@ -16,4 +16,9 @@ public class CharacterDefinition : ScriptableObject
 
     [TextArea] public string description;
     public Sprite portrait;
+
+    public Sprite leftWeaponSprite;  // what the player holds in left hand
+    [TextArea] public string leftWeaponDescription; // description of the left weapon
+    public Sprite rightWeaponSprite; // what the player holds in right hand
+    [TextArea] public string rightWeaponDescription; // description of the right weapon
 }
