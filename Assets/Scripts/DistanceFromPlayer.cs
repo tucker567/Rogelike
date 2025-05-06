@@ -18,7 +18,7 @@ public class DistanceCalculator : MonoBehaviour
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-            Debug.Log("Distance to target: " + distance);
+
             
 
             if (enemyObject == null)

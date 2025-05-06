@@ -98,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
             // DOWNWARD CONTROL: Accelerate down when S is held and not grounded
             if (downPressed && !IsGrounded())
             {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y - 1.5f);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y - 1f);
             }
         }
     }
