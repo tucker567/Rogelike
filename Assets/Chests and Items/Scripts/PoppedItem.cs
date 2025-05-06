@@ -3,15 +3,20 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D))]
 public class PoppedItem : MonoBehaviour
 {
+    public float maxrotationSpeed = 400f; // 🔀 maximum rotation speed
+    public float minrotationSpeed = 200f; // 🔀 minimum rotation speed
+    private bool isRotating = true;
     public float minFlyToPlayerDelay = 1f;   // 🔀 minimum delay
     public float maxFlyToPlayerDelay = 2.5f; // 🔀 maximum delay
     public float flySpeed = 10f;
     public float fadeSpeed = 5f;
-    public Vector3 visualScale = new Vector3(0.5f, 0.5f, 1f);
+    public Vector3 visualScale = new Vector3(0.75f, 0.75f, 1f);
 
     public Item itemData; // Assigned from ChestInteraction
 
     private SpriteRenderer spriteRenderer;
+    private float rotationSpeed;
+    private float fixedRotationAngle; // Store the fixed rotation angle
 
     public void Initialize(Item data)
     {
@@ -28,6 +33,8 @@ public class PoppedItem : MonoBehaviour
 
     void Start()
     {
+        rotationSpeed = Random.Range(minrotationSpeed, maxrotationSpeed);
+
         spriteRenderer ??= GetComponent<SpriteRenderer>();
 
         // Fallback in case Initialize wasn’t called early enough
@@ -51,6 +58,8 @@ public class PoppedItem : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.AddForce(new Vector2(dir * x, y), ForceMode2D.Impulse);
 
+        isRotating = true;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         spawnTime = Time.time;
 
@@ -68,6 +77,12 @@ public class PoppedItem : MonoBehaviour
     void Update()
     {
         float timeAlive = Time.time - spawnTime;
+        // If still in physics-based arc, rotate
+        if (isRotating && rb != null)
+        {
+            float direction = Mathf.Sign(rb.linearVelocity.x);
+            transform.Rotate(0, 0, -rotationSpeed * direction * Time.deltaTime);
+        }
 
         if (!flyingToPlayer && timeAlive >= flyDelay && player != null)
         {
@@ -76,12 +91,18 @@ public class PoppedItem : MonoBehaviour
             rb.gravityScale = 0;
             rb.simulated = false;
             flyingToPlayer = true;
+
+            isRotating = false;
+            fixedRotationAngle = transform.rotation.eulerAngles.z; // Store the current rotation angle
         }
 
         if (flyingToPlayer && player != null)
         {
             Vector3 target = player.position;
             target.z = 0;
+
+            // Maintain the fixed rotation angle
+            transform.rotation = Quaternion.Euler(0, 0, fixedRotationAngle);
 
             transform.position = Vector3.MoveTowards(transform.position, target, flySpeed * Time.deltaTime);
 
