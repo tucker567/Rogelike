@@ -15,6 +15,16 @@ public class CharacterSelectManager : MonoBehaviour
     public Image portraitDisplay;                    // portrait Image
     public TMP_Text nameText;                        // TextMeshPro for name
     public TMP_Text descriptionText;                 // TextMeshPro for description
+    public Image leftWeaponImage;                  // Image for left weapon
+    public TMP_Text leftWeaponDescription;           // TextMeshPro for left weapon description
+    public Image rightWeaponImage;                 // Image for right weapon
+    public TMP_Text rightWeaponDescription;          // TextMeshPro for right weapon description
+
+    [Header("MapSettingsInputs")]
+    public TMP_InputField magnitudeInput;
+    public TMP_InputField frequencyInput;
+    public TMP_InputField noiseThresholdInput;
+    public TMP_InputField seedInput;
 
     /* ---------- Private state ---------- */
 
@@ -55,11 +65,32 @@ public class CharacterSelectManager : MonoBehaviour
         ShowCharacterInfo(currentIndex);
     }
 
-    public void OnPlayButton()                      // wired to Play button
+    public void OnPlayButton()
     {
         PlayerPrefs.SetInt("SelectedCharacterIndex", currentIndex);
-        SceneManager.LoadScene("Map 1");         // replace with your map scene name
+
+        if (MapSettings.Instance != null)
+        {
+            if (!string.IsNullOrWhiteSpace(magnitudeInput.text))
+                float.TryParse(magnitudeInput.text, out MapSettings.Instance.magnitude);
+
+            if (!string.IsNullOrWhiteSpace(frequencyInput.text))
+                float.TryParse(frequencyInput.text, out MapSettings.Instance.frequency);
+
+            if (!string.IsNullOrWhiteSpace(noiseThresholdInput.text))
+                float.TryParse(noiseThresholdInput.text, out MapSettings.Instance.noiseThreshold);
+
+            if (!string.IsNullOrWhiteSpace(seedInput.text))
+                int.TryParse(seedInput.text, out MapSettings.Instance.seed);
+
+            Debug.Log($"Updated MapSettings: mag={MapSettings.Instance.magnitude}, freq={MapSettings.Instance.frequency}, threshold={MapSettings.Instance.noiseThreshold}, seed={MapSettings.Instance.seed}");
+        }
+
+        LevelLoader.Load("Map 1");
     }
+
+
+
 
     /* ---------- Helpers ---------- */
 
@@ -69,6 +100,10 @@ public class CharacterSelectManager : MonoBehaviour
         portraitDisplay.sprite   = d.portrait;
         nameText.text            = d.characterName;
         descriptionText.text     = d.description;
+        leftWeaponImage.sprite   = d.leftWeaponSprite;
+        leftWeaponDescription.text = d.leftWeaponDescription;
+        rightWeaponImage.sprite  = d.rightWeaponSprite;
+        rightWeaponDescription.text = d.rightWeaponDescription;
     }
 
     /* ---------- Optional: keyboard hot‑keys ---------- */

@@ -19,5 +19,10 @@ MonoBehaviour:
   baseWallJumpingPower: {x: 4, y: 8}
   baseMaxWallJumps: 4
   baseGravityScale: 2
+  baseHealth: 100
   description: Likes Magic
   portrait: {fileID: -7749075694655653220, guid: 268b515fb13a1dc478406a72d7f99eff, type: 3}
+  leftWeaponSprite: {fileID: 944511563129996037, guid: 7db867efe7ecb5c4d948db621d573aa5, type: 3}
+  leftWeaponDescription: left mage
+  rightWeaponSprite: {fileID: 944511563129996037, guid: 7db867efe7ecb5c4d948db621d573aa5, type: 3}
+  rightWeaponDescription: right mage
