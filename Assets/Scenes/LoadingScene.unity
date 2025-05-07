@@ -154,8 +154,9 @@ MonoBehaviour:
   percentText: {fileID: 1132188884}
   tips:
   - Press E to interact with chests.
-  - The Knight is a slow but is a very strong character
+  - The Knight is a slow but very strong character
   - You can wall jump up to 4 times at base stats
+  - All characters have different stats
 --- !u!4 &385048286
 Transform:
   m_ObjectHideFlags: 0
