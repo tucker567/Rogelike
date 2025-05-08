@@ -24,7 +24,7 @@ public class AStarPathfinder : MonoBehaviour
         gScore[start] = 0;
 
         int iterations = 0;
-        int maxIterations = 6000; // safe cap for maps around 160x90
+        int maxIterations = 2000; // safe cap for maps around 160x90
 
         while (openSet.Count > 0 && iterations < maxIterations)
         {
