@@ -4,9 +4,6 @@ public class MapSettings : MonoBehaviour
 {
     public static MapSettings Instance;
 
-    public float magnitude = 10f;
-    public float frequency = 1f;
-    public float noiseThreshold = 0.5f;
     public int seed = -1;
 
     void Awake()

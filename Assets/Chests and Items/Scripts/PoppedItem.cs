@@ -80,8 +80,10 @@ public class PoppedItem : MonoBehaviour
         // If still in physics-based arc, rotate
         if (isRotating && rb != null)
         {
+            float horizontalSpeed = Mathf.Abs(rb.linearVelocity.x); // Get the horizontal speed
+            float dynamicRotationSpeed = Mathf.Lerp(minrotationSpeed, maxrotationSpeed, horizontalSpeed / flySpeed); // Scale rotation speed
             float direction = Mathf.Sign(rb.linearVelocity.x);
-            transform.Rotate(0, 0, -rotationSpeed * direction * Time.deltaTime);
+            transform.Rotate(0, 0, -dynamicRotationSpeed * direction * Time.deltaTime);
         }
 
         if (!flyingToPlayer && timeAlive >= flyDelay && player != null)

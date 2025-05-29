@@ -71,19 +71,8 @@ readonly List<Vector2Int> directions = new List<Vector2Int>
 
     void Start()
     {
-        // Ensure PerlinSettings.Instance is not null before accessing it.
-        if (MapSettings.Instance != null)
-        {
-            magnitude = MapSettings.Instance.magnitude;
-            frequency = MapSettings.Instance.frequency;
-            noiseThreshold = MapSettings.Instance.noiseThreshold;
-        }
-        else
-        {
-            Debug.LogWarning("PerlinSettings.Instance is not defined.");
-        }
-
-
+        // Check if MapSettings is available and set the seed accordingly.
+        
         Debug.Log("Starting map generation...");
 
         // Generate a random seed if not provided.

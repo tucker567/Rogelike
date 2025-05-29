@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            Debug.Log("Jumping!");
+            // Debug.Log("Jumping!");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpHeight);
             CreateDust();
         }

@@ -21,9 +21,6 @@ public class CharacterSelectManager : MonoBehaviour
     public TMP_Text rightWeaponDescription;          // TextMeshPro for right weapon description
 
     [Header("MapSettingsInputs")]
-    public TMP_InputField magnitudeInput;
-    public TMP_InputField frequencyInput;
-    public TMP_InputField noiseThresholdInput;
     public TMP_InputField seedInput;
 
     /* ---------- Private state ---------- */
@@ -71,19 +68,10 @@ public class CharacterSelectManager : MonoBehaviour
 
         if (MapSettings.Instance != null)
         {
-            if (!string.IsNullOrWhiteSpace(magnitudeInput.text))
-                float.TryParse(magnitudeInput.text, out MapSettings.Instance.magnitude);
-
-            if (!string.IsNullOrWhiteSpace(frequencyInput.text))
-                float.TryParse(frequencyInput.text, out MapSettings.Instance.frequency);
-
-            if (!string.IsNullOrWhiteSpace(noiseThresholdInput.text))
-                float.TryParse(noiseThresholdInput.text, out MapSettings.Instance.noiseThreshold);
-
             if (!string.IsNullOrWhiteSpace(seedInput.text))
                 int.TryParse(seedInput.text, out MapSettings.Instance.seed);
 
-            Debug.Log($"Updated MapSettings: mag={MapSettings.Instance.magnitude}, freq={MapSettings.Instance.frequency}, threshold={MapSettings.Instance.noiseThreshold}, seed={MapSettings.Instance.seed}");
+            Debug.Log($"Updated MapSettings: seed={MapSettings.Instance.seed}");
         }
 
         LevelLoader.Load("Map 1");
